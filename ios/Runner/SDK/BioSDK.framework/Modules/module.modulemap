@@ -1,0 +1,11 @@
+framework module BioSDK {
+  umbrella header "BioSDK.h"
+
+  export *
+  module * { export * }
+}
+
+module BioSDK.Swift {
+    header "BioSDK-Swift.h"
+    requires objc
+}

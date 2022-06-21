@@ -1,0 +1,243 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.google.gms.google-services'
+
+android {
+    compileSdkVersion 31
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "vn.vnpt.digo.vncitzens.app.v2.dev"
+        minSdkVersion 21
+        targetSdkVersion 31
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        multiDexEnabled true
+        manifestPlaceholders = [
+                'appAuthRedirectScheme': 'digo'
+        ]
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    aaptOptions {
+        noCompress "bic"
+        noCompress "tflite"
+        noCompress "lite"
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+        abortOnError false        // true by default
+        checkAllWarnings false
+        checkReleaseBuilds false
+        ignoreWarnings true       // false by default
+        quiet true                // false by default
+    }
+
+    packagingOptions {
+        exclude 'okhttp3/internal/publicsuffix/NOTICE'
+        exclude 'META-INF/retrofit.kotlin_module'
+        exclude 'okhttp3/internal/publicsuffix/publicsuffixes.gz'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/ASL2.0' // ----
+
+        exclude 'constant-values.html'
+        exclude 'stylesheet.css'
+        exclude 'deprecated-list.html'
+        exclude 'allclasses-noframe.html'
+        exclude 'allclasses-frame.html'
+        exclude 'index.html'
+        exclude 'package-list'
+        exclude 'script.js'
+        exclude 'index-all.html'
+        exclude 'help-doc.html'
+        exclude 'overview-tree.html'
+
+        //SDK BIOID
+        pickFirst 'org/threeten/bp/format/ChronologyText.properties'
+        pickFirst 'org/threeten/bp/TZDB.dat'
+        pickFirst 'lib/x86/libtensorflowlite_c.so'
+        pickFirst 'lib/arm64-v8a/libpl_droidsonroids_gif.so'
+        pickFirst 'lib/armeabi/libpl_droidsonroids_gif.so'
+        pickFirst 'lib/arm64-v8a/libtensorflowlite_jni.so'
+        pickFirst 'lib/armeabi-v7a/libtensorflowlite_c.so'
+        pickFirst 'lib/x86/libinnovation-ai-cv.so'
+        pickFirst 'lib/armeabi-v7a/libinnovation-ai-cv.so'
+        pickFirst 'lib/arm64-v8a/libinnovation-ai-cv.so'
+        pickFirst 'lib/x86_64/libinnovation-ai-cv.so'
+        pickFirst 'lib/x86_64/libtensorflowlite_jni.so'
+        pickFirst 'lib/armeabi-v7a/libtensorflowlite_jni.so'
+        pickFirst 'lib/x86_64/libtensorflowlite_c.so'
+        pickFirst 'lib/x86_64/libpl_droidsonroids_gif.so'
+        pickFirst 'lib/x86/libtensorflowlite_jni.so'
+        pickFirst 'lib/x86/libpl_droidsonroids_gif.so'
+        pickFirst 'lib/armeabi-v7a/libpl_droidsonroids_gif.so'
+        pickFirst 'lib/arm64-v8a/libtensorflowlite_c.so'
+
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/x86/libc++_shared.so'
+        pickFirst 'lib/x86_64/libc++_shared.so'
+
+        pickFirst 'lib/x86/libface3d-native.so'
+        pickFirst 'lib/armeabi-v7a/libface3d-native.so'
+        pickFirst 'lib/arm64-v8a/libface3d-native.so'
+        pickFirst 'lib/x86_64/libface3d-native.so'
+
+        pickFirst 'lib/x86_64/libopencv_core.so'
+        pickFirst 'lib/armeabi-v7a/libopencv_core.so'
+        pickFirst 'lib/x86/libopencv_core.so'
+        pickFirst 'lib/arm64-v8a/libopencv_core.so'
+
+        pickFirst 'lib/arm64-v8a/libtensorflowlite_jni.so'
+        pickFirst 'lib/x86/libtensorflowlite_jni.so'
+        pickFirst 'lib/x86_64/libtensorflowlite_jni.so'
+        pickFirst 'lib/armeabi-v7a/libtensorflowlite_jni.so'
+
+        pickFirst 'lib/x86_64/libopencv_imgproc.so'
+        pickFirst 'lib/armeabi-v7a/libopencv_imgproc.so'
+        pickFirst 'lib/arm64-v8a/libopencv_imgproc.so'
+        pickFirst 'lib/x86/libopencv_imgproc.so'
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force 'com.google.android.material:material:1.3.0-alpha01'
+            force 'de.hdodenhof:circleimageview:3.0.1'
+            force 'com.google.code.gson:gson:2.8.9'
+        }
+        exclude module: 'gson'
+        exclude module: 'de.hdodenhof:circleimageview:3.0.1'
+        exclude module: 'com.aminography:primedatepicker:1.0.7'
+        exclude group :"org.threeten", module: "threetenbp"
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+repositories {
+    maven {
+        url "https://repo.eclipse.org/content/repositories/paho-releases/"
+    }
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation platform('com.google.firebase:firebase-bom:30.0.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.4'
+    implementation('org.eclipse.paho:org.eclipse.paho.android.service:1.1.1') {
+        exclude module: 'support-v4'
+    }
+    implementation 'com.airbnb.android:lottie:3.5.0'
+    implementation 'com.android.support:recyclerview-v7:24.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0-alpha01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    // VNPT PAY
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
+
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.zxing:core:3.2.1'
+    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.browser:browser:1.0.0'
+    implementation 'org.apache.commons:commons-lang3:3.4'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.10.0'
+    implementation "androidx.exifinterface:exifinterface:1.2.0"
+
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.4'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.0'
+    implementation 'com.ptrstovka.calendarview2:calendarview2:2.0-alpha5'
+    implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
+    implementation 'com.github.rey5137:material:1.2.5'
+    implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+    implementation 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+    implementation 'com.baoyz.swipemenulistview:library:1.3.0'
+    implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
+
+    implementation 'cn.pedant.sweetalert:library:1.3'
+    implementation 'com.aminography:primedatepicker:1.0.7' // Error SDK BIOID
+    implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+    implementation "com.jakewharton.timber:timber:4.7.1"
+    implementation 'com.github.ksoichiro:android-observablescrollview:1.5.0'
+    implementation 'com.google.android.gms:play-services-base:17.5.0'
+    implementation 'com.google.android.gms:play-services-identity:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:17.5.0'
+    implementation 'com.facebook.android:facebook-android-sdk:8.1.0'
+    implementation 'com.github.takusemba:spotlight:1.3.0'
+
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'], )
+}

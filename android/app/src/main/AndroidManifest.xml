@@ -1,0 +1,208 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="vn.vnpt.digo.vncitzens.flutter.app.dev">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
+    <application
+        android:icon="@mipmap/ic_launcher"
+        android:label="vnCitizens"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:icon, android:label">
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:windowSoftInputMode="adjustResize">
+            <!-- Specifies an Android theme to apply to this Activity as soon as
+                 the Android process has started. This theme is visible to the user
+                 while the Flutter UI initializes. After that, this theme continues
+                 to determine the Window background behind the Flutter UI. -->
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
+            <!-- Displays an Android View that continues showing the launch screen
+                 Drawable until Flutter paints its first frame, then this splash
+                 screen fades out. A splash screen is useful to avoid any visual
+                 gap between the end of Android's launch screen and the painting of
+                 Flutter's first frame. -->
+            <meta-data
+                android:name="io.flutter.embedding.android.SplashScreenDrawable"
+                android:resource="@drawable/launch_background" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity android:name="com.vnptit2.vnpt_vcall.NotificationActivity" />
+        <activity android:name="com.vnptit2.vnpt_vcall.MissedCall" />
+
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
+
+        <service
+            android:name="com.vnptit2.vnpt_vcall.MQTTService"
+            android:enabled="true"
+            android:stopWithTask="false" />
+
+        <service
+            android:name="com.vnptit2.vnpt_vcall.MyFirebaseInstanceIdService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="com.vnptit2.vnpt_vcall.ActionAccept"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="accept_clicked" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.vnptit2.vnpt_vcall.ActionDenied"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="denied_clicked" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.vnptit2.vnpt_vcall.ActionReCall"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="recall_clicked" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.vnptit2.vnpt_vcall.ActionReply"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="reply_clicked" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".startMainActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="startMainActivity" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.vnptit2.vnpt_vcall.ConnectionBroadcast"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="MQTT_ConectionBroadcast" />
+            </intent-filter>
+        </receiver>
+        <!-- nhận sự kiện noti -->
+        <receiver
+            android:name=".ActionAccept"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="accept_clicked" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".ActionDenied"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="denied_clicked" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".ActionNotification"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="call_notification" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+        <!-- Don't delete the meta-data below.
+             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="vncitizens_channel" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
+        <provider
+            android:authorities="${applicationId}.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"
+                tools:replace="android:resource"></meta-data>
+        </provider>
+    </application>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.APP_BROWSER" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+</manifest>

@@ -1,0 +1,41 @@
+{
+  "_id": {
+    "$oid": "6136c1aacf653768443616c3"
+  },
+  "name": "App Mobile Template",
+  "parameters": [
+    {
+      "key": "vncitizens_home_menu",
+      "type": "Object",
+      "originValue": "",
+      "objectValue": [
+        {
+          "icon": "packages/vncitizens_home/assets/icon/camera.png",
+          "name": "Camera",
+          "route": "/camera"
+        },
+        {
+          "icon": "packages/vncitizens_home/assets/icon/asxh.png",
+          "name": "Bảo hiểm xã hội",
+          "webUrl": "https://baohiemxahoi.gov.vn/Pages/default.aspx"
+        },
+        {
+          "networkIcon": "https://iscsstaticdev.digigov.vn/icon/youtube.png",
+          "name": "Youtube",
+          "deeplink": "https://youtube.com"
+        },
+        {
+          "networkIcon": "https://iscsstaticdev.digigov.vn/icon/5x-5x/pcd_covid19.png",
+          "name": "Covid 19",
+          "inAppBrowserUrl": "https://pccovid.gov.vn/"
+        }
+      ]
+    }
+  ],
+  "status": 1,
+  "usageCount": 0,
+  "createdDate": {
+    "$date": "2021-09-07T01:34:34.895Z"
+  },
+  "deploymentId": "master"
+}

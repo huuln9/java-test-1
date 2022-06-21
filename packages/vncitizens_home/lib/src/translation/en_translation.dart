@@ -1,0 +1,52 @@
+import 'package:get/get.dart';
+
+class EnTranslation extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+        'en': {
+          'danh ba khan cap': 'SOS',
+          'cong thong tin': 'Portal',
+          'dich vu cong': 'Public services',
+          'bat so xep hang': 'Book',
+          'phan anh kien nghi': 'Report',
+          'tim kiem dia diem': 'Map',
+          'camera': 'Camera',
+          'moi truong': 'Environment',
+          'van ban nha nuoc': 'Document',
+          'goi phan anh': 'Video call report',
+          'thanh toan': 'Payment',
+          'phong chong dich benh': 'Covid-19',
+          'chat tu van covid': 'Covid Chat',
+          'thong tin can biet': 'Necessary information',
+          'an sinh xa hoi': "Social security",
+          'kinh te': 'Economy',
+          'du lich': 'Travel',
+          'dat dai': 'Land',
+          'thang mot': 'January',
+          'thang hai': 'February',
+          'thang ba': 'March',
+          'thang tu': 'April',
+          'thang nam': 'May',
+          'thang sau': 'June',
+          'thang bay': 'July',
+          'thang tam': 'August',
+          'thang chin': 'September',
+          'thang muoi': 'October',
+          'thang muoi mot': 'November',
+          'thang muoi hai': 'December',
+          'duoc quan tam nhat': 'Most interested',
+          'dich vu khac': 'Other services',
+          'ung dung da co phien ban moi': "A new version is available",
+          'vui long cap nhat de tiep tuc su dung': 'Please update to continue using',
+          'bo qua': 'Skip',
+          'cap nhat': 'Update',
+          'dang nhap': 'Log in',
+          'dong': 'Close',
+          'chuc nang can dang nhap truoc': 'Feature require login',
+          'tien dien': 'Electronic',
+          'tien nuoc': 'Water',
+          'danh gia can bo': 'Staff evaluation',
+          "danh ba": "Contact"
+        },
+      };
+}

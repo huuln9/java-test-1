@@ -1,0 +1,6 @@
+framework module FinalSDK {
+  umbrella header "FinalSDK.h"
+
+  export *
+  module * { export * }
+}
