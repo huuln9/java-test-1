@@ -11,15 +11,17 @@ dependencies:
   flutter:
     sdk: flutter
   vncitizens_common:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_common
+    path: ../vncitizens_common
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_common
   vncitizens_account:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_account
+    path: ../vncitizens_account
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_account
   flutter_html: ^2.2.1
 
 dev_dependencies:

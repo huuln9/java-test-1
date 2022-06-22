@@ -87,10 +87,7 @@ class EnTranslation extends Translations {
           'xoa phan anh da gui': 'Delete sent petition?',
           'cap nhat phan anh that bai': 'Update petition successfully',
           'cap nhat phan anh thanh cong': 'Update petition failed',
-          'cap nhat phan anh': 'Update petition',
-          'nguoi dung khong mo dinh vi':
-              "User does not open coordinates location",
-          'khong co quyen su dung dinh vi': "No permission to use geolocation"
+          'cap nhat phan anh': 'Update petition'
         }
       };
 }

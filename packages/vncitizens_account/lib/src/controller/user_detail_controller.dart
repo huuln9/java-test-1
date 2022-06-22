@@ -5,8 +5,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vncitizens_account/src/config/account_route_config.dart';
-import 'package:vncitizens_account/src/model/place_model.dart';
-import 'package:vncitizens_account/src/model/user_address_model.dart';
 import 'package:vncitizens_common/dio.dart' as dio;
 import 'package:vncitizens_common/vncitizens_common.dart';
 import 'package:vncitizens_petition/vncitizens_petition.dart';
@@ -23,7 +21,6 @@ import '../config/constant.dart' as constant;
 class UserDetailController extends GetxController {
   RxString phoneNumber = "".obs;
   RxString email = "".obs;
-  RxString currentAddress = "".obs;
   RxString shortName = "".obs;
   RxString fullName = "".obs;
   List<String> usernames = [];
@@ -45,8 +42,6 @@ class UserDetailController extends GetxController {
   Map twoSideDocumentResult = {};
 
   RxBool loading = false.obs;
-
-  UserFullyModel? userFullyModel;
 
   @override
   void onInit() {
@@ -71,12 +66,6 @@ class UserDetailController extends GetxController {
     log(response.statusCode.toString(), name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
     log(response.body.toString(), name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
     if (response.statusCode == 200) {
-      /// convert to model
-      try {
-          userFullyModel = UserFullyModel.fromJson(response.body);
-      } catch (error) {
-        log("Cannot convert to model", name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
-      }
       shortName.value = getShortStringFromName();
       phoneNumber.value =
       response.body["phoneNumber"] == null || response.body["phoneNumber"].length == 0 ? "" : response.body["phoneNumber"][0]["value"];
@@ -141,27 +130,6 @@ class UserDetailController extends GetxController {
         }.call();
       } else {
         AuthUtil.deleteAvatar();
-      }
-
-      /// set current address
-      try {
-          if (response.body["address"] != null) {
-            final curAddress = UserAddressModel.fromListJson(response.body["address"]).firstWhereOrNull((element) => element.type == 4);
-            if (curAddress != null) {
-              (() async {
-                Response response = await LocationService().getPlaceById(id: curAddress.placeId);
-                log(response.body.toString(), name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
-                if (response.statusCode == 200) {
-                  final tmpPlace = PlaceModel.fromMap(response.body);
-                  currentAddress.value = (curAddress.address.isEmpty ? "" : curAddress.address + ", ") + (tmpPlace.name + ", ") + (tmpPlace.fullPlace ?? "");
-                }
-              }).call();
-            }
-          }
-      } catch (error) {
-        // do nothing
-        log("Cannot get current address", name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
-        log(error.toString(), name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
       }
     } else {
       log("Get user failed", name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));

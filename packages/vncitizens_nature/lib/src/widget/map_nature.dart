@@ -25,25 +25,49 @@ class MapNature extends GetView<MapNatureController> {
           resizeToAvoidBottomInset: false,
           bottomNavigationBar: const MyBottomAppBar(),
           appBar: AppBar(
-            title: Obx(() => !controller.isShowSearchInput.value
-                ? Text("nature".tr, style: const TextStyle(fontSize: 24))
-                : _SearchInput(controller: controller)),
-            actions: [
-              Obx(() => controller.isShowSearchInput.value
-                  ? IconButton(onPressed: () => controller.onClickSearchDeleteIcon(), icon: const Icon(Icons.close))
-                  : IconButton(onPressed: () => controller.onTapIconSearch(), icon: const Icon(Icons.search))),
-              IconButton(
-                onPressed: () => controller.onTapListNature(context),
-                icon: const Icon(Icons.list),
-              )
-            ],
+            title: Text("nature".tr),
           ),
           body: ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: MediaQuery.of(context).size.height,
               maxWidth: MediaQuery.of(context).size.width,
             ),
-            child: _buildMapNature(context),
+            child: Stack(
+              children: [
+                _buildMapNature(context),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: TextFormField(
+                      style: const TextStyle(color: Color.fromRGBO(67, 67, 67, 1), fontSize: 16),
+                      controller: controller.searchController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        fillColor: Colors.white,
+                        filled: true,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Color.fromRGBO(206, 206, 206, 1), width: 1.0),
+                          borderRadius: BorderRadius.circular(3.5),
+                        ),
+                        hintText: "enterlocation".tr,
+                        isDense: true,
+                        contentPadding: const EdgeInsets.all(14),
+                        suffixIcon: Obx(() => Visibility(
+                            visible: controller.isShowSearchDeleteIcon.value,
+                            child: IconButton(
+                              onPressed: () => controller.onClickSearchDeleteIcon(),
+                              icon: const Icon(Icons.close, size: 24),
+                            ),
+                          ),
+                        )),
+                        onChanged: (value) => controller.onChangeSearch(value),
+                        onEditingComplete: () => controller.onSearchComplete(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -51,29 +75,38 @@ class MapNature extends GetView<MapNatureController> {
   }
 
   Widget _buildMapNature(BuildContext context) {
-    return Obx(() => FlutterMap(
-      mapController: controller.mapController,
-      options: MapOptions(
-        zoom: controller.defaultZoom,
-        minZoom: 1,
-        maxZoom: 17,
-      ),
-      layers: [
-        TileLayerOptions(
-          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          subdomains: ['a', 'b', 'c'],
-        ),
-        MarkerLayerOptions(
-          markers: _getListNatureMarket(),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: Obx(
+            () => FlutterMap(
+              mapController: controller.mapController,
+              options: MapOptions(
+                zoom: controller.defaultZoom,
+                minZoom: 1,
+                maxZoom: 17,
+              ),
+              layers: [
+                TileLayerOptions(
+                  urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  subdomains: ['a', 'b', 'c'],
+                ),
+                MarkerLayerOptions(
+                  markers: _getListNatureMarket(),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
-    ));
+    );
   }
 
   List<Marker> _getListNatureMarket() {
     const double iconSize = 30;
     List<Marker> list = [];
-    for (var element in controller.natureStationList) {
+    for (var element in controller.natureStationItemModel) {
       list.add(InformationPopupNatureModel(
         point: LatLng(element.su_location_lat, element.su_location_lng),
         width: 40,
@@ -86,30 +119,5 @@ class MapNature extends GetView<MapNatureController> {
     }
 
     return list;
-  }
-}
-
-class _SearchInput extends StatelessWidget {
-  const _SearchInput({Key? key, required this.controller}) : super(key: key);
-
-  final MapNatureController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      autofocus: true,
-      controller: controller.searchController,
-      onChanged: (value) => controller.onChangeSearch(value),
-      onEditingComplete: () => controller.onSearchComplete(),
-      style: const TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.only(left: 10, right: 10),
-        hintText: "enterlocation".tr,
-        hintStyle: const TextStyle(color: Color.fromRGBO(255, 255, 255, 0.5), fontSize: 24),
-        filled: true,
-        fillColor: Colors.transparent,
-      ),
-    );
   }
 }

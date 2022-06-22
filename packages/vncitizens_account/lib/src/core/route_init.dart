@@ -21,7 +21,6 @@ import 'package:vncitizens_account/src/widget/reset_pass_email_otp.dart';
 import 'package:vncitizens_account/src/widget/reset_pass_new_pass.dart';
 import 'package:vncitizens_account/src/widget/reset_pass_sms.dart';
 import 'package:vncitizens_account/src/widget/reset_pass_sms_otp.dart';
-import 'package:vncitizens_account/src/widget/update_current_address.dart';
 import 'package:vncitizens_account/src/widget/update_document.dart';
 import 'package:vncitizens_account/src/widget/user_detail.dart';
 
@@ -47,5 +46,4 @@ initAppRoute() async {
   GetPageCenter.add(GetPage(name: AccountRouteConfig.registerAfterDocumentOtpRoute, page: () => const RegisterAfterDocumentOtp(), binding: AllBinding()));
   GetPageCenter.add(GetPage(name: AccountRouteConfig.updateDocumentRoute, page: () => const UpdateDocument(), binding: AllBinding()));
   GetPageCenter.add(GetPage(name: AccountRouteConfig.faceUsernameRoute, page: () => const FaceUsername(), binding: AllBinding()));
-  GetPageCenter.add(GetPage(name: AccountRouteConfig.updateCurrentAddress, page: () => const UpdateCurrentAddress(), binding: AllBinding()));
 }

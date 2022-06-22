@@ -5,7 +5,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:vncitizens_common/vncitizens_common.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 import 'package:vncitizens_nature/src/config/app_config.dart';
-import 'package:vncitizens_nature/src/const/nature_constant.dart';
 import 'package:vncitizens_nature/src/model/attribute_nature_station_model.dart';
 import 'package:vncitizens_nature/src/model/nature_station_item_model.dart';
 import 'package:vncitizens_common/vncitizens_common.dart' hide LatLng;
@@ -21,8 +20,7 @@ class MapNatureController extends GetxController {
   late BuildContext bottomSheetDetailContext;
   RxBool isShowSearchDeleteIcon = false.obs;
   RxBool isInitializedDetail = false.obs;
-  RxBool isShowSearchInput = false.obs;
-  RxList<NatureStationItemModel> natureStationList = <NatureStationItemModel>[].obs;
+  RxList<NatureStationItemModel> natureStationItemModel = <NatureStationItemModel>[].obs;
   RxList<NatureStationItemModel> natureStationSearchOrigin = <NatureStationItemModel>[].obs;
   RxList<AttributeNatureStationModel> attributeNatureStationModel = <AttributeNatureStationModel>[].obs;
 
@@ -30,23 +28,21 @@ class MapNatureController extends GetxController {
   void onInit() {
     super.onInit();
     if(Get.arguments != null && Get.arguments[0] != null && Get.arguments[0] is List<NatureStationItemModel>) {
-      natureStationList.value = Get.arguments[0];
-      getListNatureStation().then((value) async {
-        natureStationSearchOrigin.addAll(value);
-      });
-      if(natureStationList.isNotEmpty) {
+      natureStationItemModel.value = Get.arguments[0];
+      natureStationSearchOrigin.value = Get.arguments[0];
+      if(natureStationItemModel.isNotEmpty) {
         mapController.onReady.then((value) => initMap());
       } else {
         dev.log("Empty data", name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
         getListNatureStation().then((value) {
-          natureStationList.value = value;
+          natureStationItemModel.value = value;
           initMap();
         });
       }
     } else {
       dev.log("Empty arguments", name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
       getListNatureStation().then((value) {
-        natureStationList.value = value;
+        natureStationItemModel.value = value;
         initMap();
       });
     }
@@ -71,7 +67,6 @@ class MapNatureController extends GetxController {
   }
 
   void initMap() {
-    isShowSearchInput.value = false;
     try {
       latLng.LatLng defaultLocation = latLng.LatLng(AppConfig.defaultLatitude, AppConfig.defaultLongitude);
       mapController.move(defaultLocation, defaultZoom);
@@ -99,61 +94,57 @@ class MapNatureController extends GetxController {
         context: Get.context!,
         builder: (context) {
           bottomSheetDetailContext = context;
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    child: Text(natureStationItemModel.su_name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    margin: const EdgeInsets.only(top: 15, left: 10, bottom: 5),
+                  ),
+                  const Spacer(),
+                  Container(
+                    margin: const EdgeInsets.only(top: 15, right: 10, bottom: 5),
+                    child: IconButton(onPressed: () => closeModalBottomSheet(), icon: const Icon(Icons.close)))
+                ],
+              ),
+              Container(
+                child: Text(natureStationItemModel.su_address, style: const TextStyle(fontSize: 14, color: Color.fromRGBO(126, 132, 135, 1))),
+                margin: const EdgeInsets.only(left: 10, top: 5, bottom: 15),
+                alignment: Alignment.centerLeft,
+              ),
+              Table(
+                border: TableBorder.all(width: 1, color: const Color.fromRGBO(233, 231, 231, 1)),
+                children: attributeNatureStationModel.map((item){
+                  return TableRow(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          color: const Color.fromRGBO(21, 101, 192, 1),
+                          alignment: Alignment.centerLeft,
+                          child: Text(item.datatype_name, style: const TextStyle(fontSize: 14, color: Colors.white)),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          alignment: Alignment.centerRight,
+                          child: Text(item.data_val.toString(), style: const TextStyle(fontSize: 14)),
+                        ),
+                      ]);
+                }).toList(),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      child: Text(natureStationItemModel.su_name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                      margin: const EdgeInsets.only(top: 15, left: 10, bottom: 5),
-                    ),
-                    const Spacer(),
-                    Container(
-                      margin: const EdgeInsets.only(top: 15, right: 10, bottom: 5),
-                      child: IconButton(onPressed: () => closeModalBottomSheet(), icon: const Icon(Icons.close)))
+                    Image.asset("${AppConfig.assetsRoot}/images/reload_nature_station.png",
+                        width: 22),
+                    Text("Cập nhật lúc " + currentHour + ", ngày " + currentDay, style: const TextStyle(fontSize: 14, color: Color.fromRGBO(126, 132, 135, 1)))
                   ],
                 ),
-                Container(
-                  child: Text(natureStationItemModel.su_address, style: const TextStyle(fontSize: 14, color: Color.fromRGBO(126, 132, 135, 1))),
-                  margin: const EdgeInsets.only(left: 10, top: 5, bottom: 15),
-                  alignment: Alignment.centerLeft,
-                ),
-                Table(
-                  border: TableBorder.all(width: 1, color: const Color.fromRGBO(233, 231, 231, 1)),
-                  children: attributeNatureStationModel.map((item){
-                    return TableRow(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            color: const Color.fromRGBO(21, 101, 192, 1),
-                            alignment: Alignment.centerLeft,
-                            child: Text(item.datatype_name, style: const TextStyle(fontSize: 14, color: Colors.white)),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            alignment: Alignment.centerRight,
-                            child: Text(item.data_val.toString(), style: const TextStyle(fontSize: 14)),
-                          ),
-                        ]);
-                  }).toList(),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          onPressed: () => reloadModalBottomSheet(natureStationItemModel),
-                          icon: Image.asset("${AppConfig.assetsRoot}/images/reload_nature_station.png",
-                              width: 22)),
-                      Text("Cập nhật lúc " + currentHour + ", ngày " + currentDay, style: const TextStyle(fontSize: 14, color: Color.fromRGBO(126, 132, 135, 1)))
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           );
         });
   }
@@ -218,10 +209,6 @@ class MapNatureController extends GetxController {
   void onClickSearchDeleteIcon() {
     searchController.clear();
     isShowSearchDeleteIcon.value = false;
-    natureStationList.value = natureStationSearchOrigin.value;
-    FocusManager.instance.primaryFocus?.unfocus();
-    latLng.LatLng defaultLocation = latLng.LatLng(AppConfig.defaultLatitude, AppConfig.defaultLongitude);
-    mapController.move(defaultLocation, defaultZoom);
   }
 
   void onChangeSearch(String? value) {
@@ -242,14 +229,12 @@ class MapNatureController extends GetxController {
     }
 
     List<NatureStationItemModel> tmpStation = natureStationSearchOrigin.value.where((element)
-    => element.su_address.toLowerCase().contains(searchController.text.toLowerCase())
-        || element.su_name.toLowerCase().contains(searchController.text.toLowerCase())).toList();
+    => element.su_address.toLowerCase().contains(searchController.text.toLowerCase())).toList();
     if (tmpStation.isEmpty) {
       initMap();
       buildSnackBarEmptyData();
     }  else {
       latLng.LatLng firstLocation = latLng.LatLng(tmpStation.first.su_location_lat, tmpStation.first.su_location_lng);
-      natureStationList.value = tmpStation;
       mapController.move(firstLocation, defaultZoom);
     }
   }
@@ -274,24 +259,5 @@ class MapNatureController extends GetxController {
       duration: const Duration(seconds: 3),
       animationDuration: const Duration(milliseconds: 200),
     ));
-  }
-
-  void reloadModalBottomSheet(NatureStationItemModel natureStationItemModel) {
-    attributeNatureStationModel.clear();
-    getDetailStationNature(natureStationItemModel).then((value) async {
-      attributeNatureStationModel.addAll(value);
-      isInitializedDetail.value = true;
-      Navigator.pop(dialogLoadingContext);
-    });
-    buildLoadingDialog();
-  }
-
-  void onTapIconSearch() {
-    isShowSearchInput.value = true;
-  }
-
-  void onTapListNature(BuildContext context) {
-    Get.back();
-    Get.toNamed(NatureConstant.natureRoute, arguments: [natureStationList]);
   }
 }

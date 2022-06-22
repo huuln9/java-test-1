@@ -1,4 +1,3 @@
-import 'package:vncitizens_account/src/controller/account_update_address_controller.dart';
 import 'package:vncitizens_common/vncitizens_common.dart';
 import 'package:vncitizens_account/src/controller/auth_controller.dart';
 import 'package:vncitizens_account/src/controller/change_email_controller.dart';
@@ -43,6 +42,5 @@ class AllBinding extends Bindings {
     Get.lazyPut(() => RegisterAfterDocumentOtpController());
     Get.lazyPut(() => UpdateDocumentController());
     Get.lazyPut(() => FaceUsernameController());
-    Get.lazyPut(() => AccountUpdateAddressController());
   }
 }

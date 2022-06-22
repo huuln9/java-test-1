@@ -11,30 +11,35 @@ dependencies:
   flutter:
     sdk: flutter
   vncitizens_common:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_common
+    path: ../vncitizens_common
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_common
   vncitizens_petition:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_petition
+    path: ../vncitizens_petition
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_petition
   vncitizens_account:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_account
+    path: ../vncitizens_account
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_account
   vncitizens_setting:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_setting
+    path: ../vncitizens_setting
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_setting
   vncitizens_payment:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_payment
+    path: ../vncitizens_payment
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_payment
 
 dev_dependencies:
   flutter_test:

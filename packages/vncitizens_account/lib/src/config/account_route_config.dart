@@ -57,7 +57,4 @@ class AccountRouteConfig {
 
   /// face username route
   static const String faceUsernameRoute = "/${AccountAppConfig.packageName}/face_username";
-
-  /// update user current address
-  static const String updateCurrentAddress = "/${AccountAppConfig.packageName}/update_current_address";
 }

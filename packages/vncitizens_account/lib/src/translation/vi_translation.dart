@@ -116,13 +116,6 @@ class ViTranslation extends Translations {
       "chi cho phep ky tu so": "Chỉ cho phép ký tự số",
       "chua hop le, do dai phai 12 ky tu": "Chưa hợp lệ, độ dài phải 12 ký tự",
       "chua hop le, do dai phai 9 ky tu": "Chưa hợp lệ, độ dài phải 9 ký tự",
-      "dia chi hien tai": "Địa chỉ hiện tại",
-      "khong tim thay quoc gia": "Không tìm thấy quốc gia",
-      "chi tiet dia chi": "Chi tiết địa chỉ",
-      "vui long chon du lieu": "Vui lòng chọn dữ liệu",
-      "vui long nhap du lieu": "Vui lòng nhập dữ liệu",
-      "dang xu ly. vui long cho giay lat": "Đang xử lý. Vui lòng chờ giây lát",
-      "cap nhat du lieu that bai": "Cập nhật dữ liệu thất bại"
     },
   };
 }

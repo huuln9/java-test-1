@@ -116,13 +116,6 @@ class EnTranslation extends Translations {
       "chi cho phep ky tu so": "Accept only number",
       "chua hop le, do dai 12 ky tu": "Invalid, length must be 12",
       "chua hop le, do dai 9 ky tu": "Invalid, length must be 9",
-      "dia chi hien tai": "Current address",
-      "khong tim thay quoc gia": "Cannot found nation",
-      "chi tiet dia chi": "Address detail",
-      "vui long chon du lieu": "Please select data",
-      "vui long nhap du lieu": "Please enter data",
-      "dang xu ly. vui long cho giay lat": "Processing. PLease wait a moment",
-      "cap nhat du lieu that bai": "Update data failed"
     },
   };
 }

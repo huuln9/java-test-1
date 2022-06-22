@@ -14,20 +14,23 @@ dependencies:
   jwt_decoder: ^2.0.1
   path_provider: ^2.0.8
   vncitizens_common:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_common
+    path: ../vncitizens_common
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_common
   vncitizens_petition:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_petition
+    path: ../vncitizens_petition
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_petition
   vncitizens_setting:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_setting
+    path: ../vncitizens_setting
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_setting
 
 dev_dependencies:
   flutter_test:

@@ -7,7 +7,6 @@ class PlaceModel {
   String? fullPlace;
   IdNameModel? parent;
   IdNameModel? nation;
-  List<IdNameModel>? ancestors;
 
   PlaceModel({
     required this.id,
@@ -16,12 +15,12 @@ class PlaceModel {
     this.fullPlace,
     this.parent,
     this.nation,
-    this.ancestors,
   });
+
 
   @override
   String toString() {
-    return 'PlaceModel{id: $id, name: $name, address: $address, fullPlace: $fullPlace, parent: $parent, nation: $nation, ancestors: $ancestors}';
+    return 'PlaceModel{id: $id, name: $name, address: $address, fullPlace: $fullPlace, parent: $parent, nation: $nation}';
   }
 
   Map<String, dynamic> toMap() {
@@ -32,7 +31,6 @@ class PlaceModel {
       'fullPlace': fullPlace,
       'parent': parent,
       'nation': nation,
-      'ancestors': ancestors,
     };
   }
 
@@ -44,7 +42,6 @@ class PlaceModel {
       fullPlace: map['fullPlace'] as String,
       parent: map['parent'] != null ? IdNameModel.fromMap(map['parent']) : null,
       nation: map['nation'] != null ? IdNameModel.fromMap(map['nation']) : null,
-      ancestors: map['ancestors'] != null ? IdNameModel.fromListMap(map['ancestors']) : []
     );
   }
 

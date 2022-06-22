@@ -101,61 +101,57 @@ class MapNatureItemController extends GetxController {
         context: Get.context!,
         builder: (context) {
           bottomSheetDetailContext = context;
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    child: Text(natureStationItemModel.su_name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    margin: const EdgeInsets.only(top: 15, left: 10, bottom: 5),
+                  ),
+                  const Spacer(),
+                  Container(
+                      margin: const EdgeInsets.only(top: 15, right: 10, bottom: 5),
+                      child: IconButton(onPressed: () => closeModalBottomSheet(), icon: const Icon(Icons.close)))
+                ],
+              ),
+              Container(
+                child: Text(natureStationItemModel.su_address, style: const TextStyle(fontSize: 14, color: Color.fromRGBO(126, 132, 135, 1))),
+                margin: const EdgeInsets.only(left: 10, top: 5, bottom: 15),
+                alignment: Alignment.centerLeft,
+              ),
+              Table(
+                border: TableBorder.all(width: 1, color: const Color.fromRGBO(233, 231, 231, 1)),
+                children: attributeNatureStationModel.map((item){
+                  return TableRow(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          color: const Color.fromRGBO(21, 101, 192, 1),
+                          alignment: Alignment.centerLeft,
+                          child: Text(item.datatype_name, style: const TextStyle(fontSize: 14, color: Colors.white)),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          alignment: Alignment.centerRight,
+                          child: Text(item.data_val.toString(), style: const TextStyle(fontSize: 14)),
+                        ),
+                      ]);
+                }).toList(),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      child: Text(natureStationItemModel.su_name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                      margin: const EdgeInsets.only(top: 15, left: 10, bottom: 5),
-                    ),
-                    const Spacer(),
-                    Container(
-                        margin: const EdgeInsets.only(top: 15, right: 10, bottom: 5),
-                        child: IconButton(onPressed: () => closeModalBottomSheet(), icon: const Icon(Icons.close)))
+                    Image.asset("${AppConfig.assetsRoot}/images/reload_nature_station.png",
+                        width: 22),
+                    Text("Cập nhật lúc " + currentHour + ", ngày " + currentDay, style: const TextStyle(fontSize: 14, color: Color.fromRGBO(126, 132, 135, 1)))
                   ],
                 ),
-                Container(
-                  child: Text(natureStationItemModel.su_address, style: const TextStyle(fontSize: 14, color: Color.fromRGBO(126, 132, 135, 1))),
-                  margin: const EdgeInsets.only(left: 10, top: 5, bottom: 15),
-                  alignment: Alignment.centerLeft,
-                ),
-                Table(
-                  border: TableBorder.all(width: 1, color: const Color.fromRGBO(233, 231, 231, 1)),
-                  children: attributeNatureStationModel.map((item){
-                    return TableRow(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            color: const Color.fromRGBO(21, 101, 192, 1),
-                            alignment: Alignment.centerLeft,
-                            child: Text(item.datatype_name, style: const TextStyle(fontSize: 14, color: Colors.white)),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            alignment: Alignment.centerRight,
-                            child: Text(item.data_val.toString(), style: const TextStyle(fontSize: 14)),
-                          ),
-                        ]);
-                  }).toList(),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          onPressed: () => reloadModalBottomSheet(natureStationItemModel),
-                          icon: Image.asset("${AppConfig.assetsRoot}/images/reload_nature_station.png",
-                              width: 22)),
-                      Text("Cập nhật lúc " + currentHour + ", ngày " + currentDay, style: const TextStyle(fontSize: 14, color: Color.fromRGBO(126, 132, 135, 1)))
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           );
         });
   }
@@ -224,15 +220,5 @@ class MapNatureItemController extends GetxController {
     } else {
       throw 'Could not launch ${uri.toString()}';
     }
-  }
-
-  void reloadModalBottomSheet(NatureStationItemModel natureStationItemModel) {
-    attributeNatureStationModel.clear();
-    getDetailStationNature(natureStationItemModel).then((value) async {
-      attributeNatureStationModel.addAll(value);
-      isInitializedDetail.value = true;
-      Navigator.pop(dialogLoadingContext);
-    });
-    buildLoadingDialog();
   }
 }

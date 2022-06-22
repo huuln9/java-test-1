@@ -123,12 +123,11 @@ class Document extends GetView<DocumentController> {
           /// so cccd / cmnd / ho chieu
           TextFormField(
             controller: controller.cardNumberController,
-            keyboardType: TextInputType.number,
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
               labelText: controller.getCardNumberName(),
             ),
-            validator: (value) => controller.cardNumberValidator(value),
+            validator: (value) => controller.emptyValidator(value),
           ),
           const SizedBox(height: 20),
 

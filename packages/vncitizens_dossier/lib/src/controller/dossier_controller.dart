@@ -62,12 +62,14 @@ class DossierController extends GetxController {
     isShowSearchInput.value = false;
     searchController.clear();
     dossiers.value = [];
+
+    isLoadEmpty.value = false;
   }
 
   void onTapIconQRScan() {
     isShowQRScan.value = true;
     isShowQRScan.listen((p0) => isShowSearchInput.value = !p0);
-    searchController.addListener(() => getDossierByKey());
+    getDossierByKey();
   }
 
   Future<void> getDossierByKey() async {
@@ -141,5 +143,11 @@ class DossierController extends GetxController {
       animationDuration: const Duration(milliseconds: 200),
     ));
     return const SizedBox.shrink();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchController.dispose();
   }
 }

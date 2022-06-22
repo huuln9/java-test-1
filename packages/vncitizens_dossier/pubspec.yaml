@@ -12,15 +12,17 @@ dependencies:
   flutter:
     sdk: flutter
   vncitizens_common:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_common
+    path: ../vncitizens_common
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_common
   vncitizens_qrcode:
-    git:
-      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-      ref: v1.0.0
-      path: packages/vncitizens_qrcode
+    path: ../vncitizens_qrcode
+    # git:
+    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+    #   ref: v1.0.0
+    #   path: packages/vncitizens_qrcode
 
 dev_dependencies:
   flutter_test:

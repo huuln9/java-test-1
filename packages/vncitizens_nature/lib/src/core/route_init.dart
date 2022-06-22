@@ -13,6 +13,6 @@ import '../config/app_config.dart';
 initAppRoute() async {
     dev.log('initialize route', name: AppConfig.packageName);
     GetPageCenter.add(GetPage(name: '/vncitizens_nature', page: () => const HomeNature(), binding: NatureBinding()));
-    GetPageCenter.add(GetPage(name: '/vncitizens_nature_map', page: () => MapNature(), binding: NatureBinding()));
-    GetPageCenter.add(GetPage(name: '/vncitizens_nature_item_map', page: () => MapNatureItem(), binding: NatureBinding()));
+    GetPageCenter.add(GetPage(name: '/vncitizens_nature_camera', page: () => MapNature(), binding: NatureBinding()));
+    GetPageCenter.add(GetPage(name: '/vncitizens_nature_item_camera', page: () => MapNatureItem(), binding: NatureBinding()));
 }

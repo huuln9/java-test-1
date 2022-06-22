@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -43,7 +42,6 @@ class UserDetail extends GetView<UserDetailController> with WidgetsBindingObserv
                   Obx(() => _buildInfoItem(
                         titleLeft: "so dien thoai",
                         titleRight: controller.phoneNumber.value,
-                        context: context,
                         route: AccountRouteConfig.changePhoneNumberRoute,
                       )),
 
@@ -51,20 +49,8 @@ class UserDetail extends GetView<UserDetailController> with WidgetsBindingObserv
                   Obx(() => _buildInfoItem(
                         titleLeft: "Email",
                         titleRight: controller.email.value,
-                        context: context,
                         route: AccountRouteConfig.changeEmailRoute,
                       )),
-
-                  /// Current address
-                  Obx(() => _buildInfoItem(
-                    titleLeft: "dia chi hien tai",
-                    titleRight: controller.currentAddress.value,
-                    context: context,
-                    route: AccountRouteConfig.updateCurrentAddress,
-                    arguments: [controller.userFullyModel],
-                    routeCallback: () {
-                      controller.getUserInfo();
-                    })),
 
                   const Divider(thickness: 10, color: Color.fromRGBO(229, 229, 229, 1)),
 
@@ -152,37 +138,34 @@ class UserDetail extends GetView<UserDetailController> with WidgetsBindingObserv
     });
   }
 
-  Widget _buildButtons(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 40),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ConstrainedBox(
-            constraints: const BoxConstraints(
-              minWidth: 140,
-            ),
-            child: OutlinedButton(
-                onPressed: () => controller.logout(),
-                style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.red, width: 2)),
-                child: Text(
-                  "dang xuat".tr.toUpperCase(),
-                  style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                )),
+  Row _buildButtons(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: 140,
           ),
-          const SizedBox(width: 15),
-          ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: 140),
-            child: OutlinedButton(
-                onPressed: () => Get.toNamed(AccountRouteConfig.changePasswordRoute),
-                style: OutlinedButton.styleFrom(side: BorderSide(width: 2, color: Theme.of(context).colorScheme.primary)),
-                child: Text(
-                  "doi mat khau".tr.toUpperCase(),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                )),
-          ),
-        ],
-      ),
+          child: OutlinedButton(
+              onPressed: () => controller.logout(),
+              style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.red, width: 2)),
+              child: Text(
+                "dang xuat".tr.toUpperCase(),
+                style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              )),
+        ),
+        const SizedBox(width: 15),
+        ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 140),
+          child: OutlinedButton(
+              onPressed: () => Get.toNamed(AccountRouteConfig.changePasswordRoute),
+              style: OutlinedButton.styleFrom(side: BorderSide(width: 2, color: Theme.of(context).colorScheme.primary)),
+              child: Text(
+                "doi mat khau".tr.toUpperCase(),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              )),
+        ),
+      ],
     );
   }
 
@@ -242,37 +225,23 @@ class UserDetail extends GetView<UserDetailController> with WidgetsBindingObserv
     );
   }
 
-  Widget _buildInfoItem({required String titleLeft, String? titleRight, required String route, required BuildContext context, List<dynamic>? arguments, Function? routeCallback}) {
+  Widget _buildInfoItem({required String titleLeft, String? titleRight, required String route}) {
     return ListTile(
-      onTap: () => Get.toNamed(route, arguments: arguments)?.then((value) {
-        if (value == true) {
-          routeCallback?.call();
-        }
-      }),
-      horizontalTitleGap: 10,
+      onTap: () => Get.toNamed(route),
       title: Text(
         titleLeft.tr,
         style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.black54),
       ),
-      trailing: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: max(MediaQuery.of(context).size.width * 0.5, 250)
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              child: Text(
-                titleRight == null || titleRight.isEmpty ? "chua cap nhat".tr : titleRight,
-                style: TextStyle(fontWeight: titleRight == null || titleRight.isEmpty ? FontWeight.w300 : FontWeight.bold),
-                textAlign: TextAlign.right,
-              ),
-            ),
-            const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_right, size: 20)
-          ],
-        ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(titleRight == null || titleRight.isEmpty ? "chua cap nhat".tr : titleRight,
+              style: TextStyle(
+                fontWeight: titleRight == null || titleRight.isEmpty ? FontWeight.w300 : FontWeight.bold,
+              )),
+          const SizedBox(width: 4),
+          const Icon(Icons.keyboard_arrow_right, size: 20)
+        ],
       ),
     );
   }

@@ -3,49 +3,65 @@ import 'package:flutter/material.dart';
 import 'package:vncitizens_common/vncitizens_common.dart';
 import 'package:vncitizens_nature/src/config/app_config.dart';
 import 'package:vncitizens_nature/src/controller/home_nature_controller.dart';
-import 'package:vncitizens_common/vncitizens_common.dart' hide LatLng;
 
 class HomeNature extends GetView<HomeNatureController> {
   const HomeNature({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (Get.isSnackbarOpen) {
-          Get.closeCurrentSnackbar();
-        }
-        return true;
-      },
-      child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          bottomNavigationBar: const MyBottomAppBar(),
-          appBar: AppBar(
-            title: Obx(() => !controller.isShowSearchInput.value
-                ? Text("nature".tr, style: const TextStyle(fontSize: 24))
-                : _SearchInput(controller: controller)),
-            actions: [
-              Obx(() => controller.isShowSearchInput.value
-                  ? IconButton(onPressed: () => controller.onClickSearchDeleteIcon(), icon: const Icon(Icons.close))
-                  : IconButton(onPressed: () => controller.onTapIconSearch(), icon: const Icon(Icons.search))),
-              IconButton(
-                onPressed: () => controller.onTapOutlinedAction(context),
-                icon: const Icon(Icons.map_outlined),
-              )
-            ],
-          ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 40),
-              child: Obx(
-                    () => !controller.isInitialized.value
-                    ? _buildLoadingData(context)
-                    : controller.natureStationList.isEmpty
-                    ? _buildWithEmptyData(context)
-                    : _buildWithData(context),
-              ),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        bottomNavigationBar: const MyBottomAppBar(),
+        appBar: AppBar(
+          title: Text("nature".tr),
+          actions: [
+            IconButton(
+              onPressed: () => controller.onTapOutlinedAction(),
+              icon: const Icon(Icons.map_outlined),
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 40),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: TextFormField(
+                    controller: controller.searchController,
+                    onChanged: (value) => controller.onChangeSearch(value),
+                    onEditingComplete: () => controller.onSearchComplete(),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(
+                          left: 10, top: 15, bottom: 0, right: 10),
+                      border: InputBorder.none,
+                      hintText: "enterlocation".tr,
+                      suffixIcon: Obx(
+                        () => Visibility(
+                          visible: controller.isShowSearchDeleteIcon.value,
+                          child: IconButton(
+                            onPressed: () => controller.onClickSearchDeleteIcon(),
+                            icon: const Icon(Icons.close, size: 24),
+                          ),
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                  ),
+                ),
+                Obx(
+                  () => !controller.isInitialized.value
+                      ? _buildLoadingData(context)
+                      : controller.natureStationList.isEmpty
+                          ? _buildWithEmptyData(context)
+                          : _buildWithData(context),
+                ),
+              ],
             ),
           ),
         ),
@@ -162,31 +178,6 @@ class HomeNature extends GetView<HomeNatureController> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _SearchInput extends StatelessWidget {
-  const _SearchInput({Key? key, required this.controller}) : super(key: key);
-
-  final HomeNatureController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      autofocus: true,
-      controller: controller.searchController,
-      onChanged: (value) => controller.onChangeSearch(value),
-      onEditingComplete: () => controller.onSearchComplete(),
-      style: const TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.only(left: 10, right: 10),
-        hintText: "enterlocation".tr,
-        hintStyle: const TextStyle(color: Color.fromRGBO(255, 255, 255, 0.5), fontSize: 24),
-        filled: true,
-        fillColor: Colors.transparent,
       ),
     );
   }

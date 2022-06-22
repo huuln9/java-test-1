@@ -88,10 +88,7 @@ class ViTranslation extends Translations {
           'xoa phan anh da gui': 'Xoá phản ánh đã gửi?',
           'cap nhat phan anh that bai': 'Cập nhât phản ánh thất bại',
           'cap nhat phan anh thanh cong': 'Cập nhật phản ánh thành công',
-          'cap nhat phan anh': 'Cập nhật phản ánh',
-          'nguoi dung khong mo dinh vi tao do':
-              'Người dùng không mở định vị toạ độ',
-          'khong co quyen su dung dinh vi': "Không có quyền sử dụng định vị"
+          'cap nhat phan anh': 'Cập nhật phản ánh'
         },
       };
 }

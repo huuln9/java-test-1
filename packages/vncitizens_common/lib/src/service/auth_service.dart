@@ -14,7 +14,6 @@ import 'package:vncitizens_common/vncitizens_common.dart';
 
 class AuthService extends GetConnect {
   static const String _prefix = "auth";
-  static const Duration _timeout = Duration(seconds: 30);
 
   Future<Response> createUserFully({
     required String fullname,
@@ -219,12 +218,5 @@ class AuthService extends GetConnect {
     String url = "${AppConfig.iscsApiEndpoint}/$_prefix/user/$userId/avatar";
     log(url, name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
     return await put(url, formData, headers: headers);
-  }
-
-  Future<Response> updateAddress({required String id, required List<dynamic> address}) async{
-    Map<String, String> headers = {'Authorization': 'Bearer ${AppConfig.accessToken}'};
-    String url = "${AppConfig.iscsApiEndpoint}/$_prefix/user/$id/address";
-    log(url, name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
-    return await put(url, address, contentType: "application/json", headers: headers).timeout(_timeout);
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +13,6 @@ import 'package:vncitizens_account/src/util/AuthUtil.dart';
 import 'package:vncitizens_account/src/widget/error_dialog.dart';
 import 'package:vncitizens_account/src/widget/success_dialog.dart';
 import 'package:vncitizens_common/dio.dart' as dio;
-// import '../config/constant.dart' as constant;
 
 class RegisterController extends GetxController {
   final registerFormKey = GlobalKey<FormState>();

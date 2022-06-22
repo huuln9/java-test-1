@@ -1,7 +1,7 @@
 PODS:
   - audio_session (0.0.1):
     - Flutter
-  - camera_avfoundation (0.0.1):
+  - camera (0.0.1):
     - Flutter
   - connectivity (0.0.1):
     - Flutter
@@ -49,10 +49,10 @@ PODS:
   - Firebase/Messaging (8.15.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 8.15.0)
-  - firebase_core (1.18.0):
+  - firebase_core (1.17.1):
     - Firebase/CoreOnly (= 8.15.0)
     - Flutter
-  - firebase_messaging (11.4.2):
+  - firebase_messaging (11.4.1):
     - Firebase/Messaging (= 8.15.0)
     - firebase_core
     - Flutter
@@ -211,7 +211,7 @@ PODS:
 
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
-  - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
+  - camera (from `.symlinks/plugins/camera/ios`)
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - downloads_path_provider_28 (from `.symlinks/plugins/downloads_path_provider_28/ios`)
@@ -282,8 +282,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
-  camera_avfoundation:
-    :path: ".symlinks/plugins/camera_avfoundation/ios"
+  camera:
+    :path: ".symlinks/plugins/camera/ios"
   connectivity:
     :path: ".symlinks/plugins/connectivity/ios"
   device_info:
@@ -365,7 +365,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
-  camera_avfoundation: 07c77549ea54ad95d8581be86617c094a46280d9
+  camera: 9993f92f2c793e87b65e35f3a23c70582afb05b1
   connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   DKImagePickerController: 72fd378f244cef3d27288e0aebf217a4467e4012
@@ -373,8 +373,8 @@ SPEC CHECKSUMS:
   downloads_path_provider_28: 7425048683ec0b86238361bd93795e91c2bc61a2
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
-  firebase_core: b14c1cfa29b9eb316345f74d1489328283825d6d
-  firebase_messaging: 5374d57b2ca7a5efe1a150500b9a2451ca9ff5af
+  firebase_core: 318de541b0e61d3f24262982a3f0b54afe72439b
+  firebase_messaging: 943cfe65e0b3f457240489ce67655e40da1d270c
   FirebaseCore: 5743c5785c074a794d35f2fff7ecc254a91e08b1
   FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
   FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd

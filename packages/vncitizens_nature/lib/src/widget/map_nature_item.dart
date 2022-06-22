@@ -34,7 +34,7 @@ class MapNatureItem extends GetView<MapNatureItemController> {
           resizeToAvoidBottomInset: false,
           bottomNavigationBar: const MyBottomAppBar(),
           appBar: AppBar(
-            title: Text("nature".tr, style: const TextStyle(fontSize: 24)),
+            title: Text("nature".tr),
           ),
           body: ConstrainedBox(
             constraints: BoxConstraints(

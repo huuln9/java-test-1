@@ -7,11 +7,6 @@ class IdNameModel {
     this.name,
   });
 
-  @override
-  String toString() {
-    return '{id: $id, name: $name}';
-  }
-
   Map<String, dynamic> toMap() {
     return {
       'id': id,

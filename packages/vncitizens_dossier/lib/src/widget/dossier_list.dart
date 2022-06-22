@@ -116,9 +116,9 @@ class DossierList extends GetView<DossierController> {
                         Text('co quan thuc hien'.tr + ': ',
                             style: const TextStyle(
                                 color: Colors.black45, fontSize: 12)),
-                        const Text('So tu phap',
-                            style:
-                                TextStyle(color: Colors.black45, fontSize: 12)),
+                        Text(agency,
+                            style: const TextStyle(
+                                color: Colors.black45, fontSize: 12)),
                       ],
                     )
                   : const SizedBox.shrink(),

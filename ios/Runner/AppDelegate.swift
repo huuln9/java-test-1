@@ -185,11 +185,6 @@ import Firebase
     override func applicationWillTerminate(_ application: UIApplication) {
         VNPTPay.logout()
     }
-    
-    override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        Messaging.messaging().apnsToken = deviceToken
-        super.application(application, didRegisterForRemoteNotificationsWithDeviceToken: deviceToken)
-    }
 }
 
 #if !targetEnvironment(simulator)

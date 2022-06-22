@@ -459,16 +459,10 @@ class DocumentController extends GetxController {
           default:
             break;
         }
-        List<UserAddressModel> tmpAddress = [];
-        final addressCurrent = userInfo!.address?.firstWhereOrNull((element) => element.type == 4);
-        if (addressCurrent != null) {
-          tmpAddress.add(addressCurrent);
-        }
-        tmpAddress.addAll([
+        userFullyModel.address = [
           UserAddressModel(address: recentAddressDetailController.text, placeId: recentAddressIdSelected ?? "", type: 1),
           UserAddressModel(address: originAddressDetailController.text, placeId: originAddressIdSelected ?? "", type: 3),
-        ]);
-        userFullyModel.address = tmpAddress;
+        ];
         // if (personId != null) {
         //   if (userFullyModel.vnptBioId != null) {
         //     userFullyModel.vnptBioId = userFullyModel.vnptBioId!.copyWith(personId: personId!);

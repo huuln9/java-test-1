@@ -252,37 +252,6 @@ class UpdateDocumentController extends GetxController {
     return null;
   }
 
-  String? cardNumberValidator(String? value) {
-    if (value == null || value.isEmpty || value.isBlank == true) {
-      return "khong bo trong truong nay".tr;
-    } else {
-      String pattern = r'([0-9]+)';
-      RegExp regExp = RegExp(pattern);
-      if (regExp.hasMatch(value) != true) {
-        return "chi cho phep ky tu so".tr;
-      }
-      switch (documentType) {
-        case 1:
-          {
-            /// validate citizen identity
-            return value.length == 12 ? null : "chua hop le, do dai phai 12 ky tu".tr;
-          }
-        case 2:
-          {
-            /// validate identity
-            return value.length == 9 ? null : "chua hop le, do dai phai 9 ky tu".tr;
-          }
-        case 3:
-          {
-            /// validate passport
-            return value.length <= 64 ? null : "do dai toi da 64 ky tu".tr;
-          }
-        default:
-          return null;
-      }
-    }
-  }
-
   // ============= end validators ================
 
   // ============= EVENTS ========================
@@ -461,10 +430,6 @@ class UpdateDocumentController extends GetxController {
     }
   }
 
-  UserAddressModel? getUserAddressByType(int type, List<UserAddressModel> address) {
-    return address.firstWhereOrNull((element) => element.type == type);
-  }
-
   Future<void> submit({Function? callbackError}) async {
     final formState = formKey.currentState;
     if (formState != null && formState.validate()) {
@@ -493,16 +458,10 @@ class UpdateDocumentController extends GetxController {
         default:
           break;
       }
-      List<UserAddressModel> tmpAddress = [];
-      final addressCurrent = userInfo.address?.firstWhereOrNull((element) => element.type == 4);
-      if (addressCurrent != null) {
-        tmpAddress.add(addressCurrent);
-      }
-      tmpAddress.addAll([
+      userFullyModel.address = [
         UserAddressModel(address: recentAddressDetailController.text, placeId: recentAddressIdSelected ?? "", type: 1),
         UserAddressModel(address: originAddressDetailController.text, placeId: originAddressIdSelected ?? "", type: 3),
-      ]);
-      userFullyModel.address = tmpAddress;
+      ];
       dev.log(userFullyModel.toJson().toString(), name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
       Response response = await AuthService().updateUserFullyByJson(id: userFullyModel.id ?? "", json: userFullyModel.toJson());
       dev.log(response.body.toString(), name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));

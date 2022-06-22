@@ -8,7 +8,7 @@ class EnTranslation extends Translations {
         "en": {
           "nature": "Nature",
           "notfound": "Not found",
-          "enterlocation": "Enter search",
+          "enterlocation": "Enter location",
           "loadingdata": "Loading data",
           "emptydata": "Not found Nature Station",
           "emptylocation": "Not found location",

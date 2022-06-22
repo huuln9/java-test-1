@@ -766,12 +766,9 @@ class PetitionCreateController extends GetxController {
       takePlaceAt = TakePlaceAtModel(
           fullAddress: petitionAddressController.text, place: takePlace);
     }
-    var title = titleController.text;
-    if(title.isEmpty){
-      title = tagSelected.value!.name;
-    }
+
     var petition = {
-      'title': title,
+      'title': titleController.text,
       'description': descriptionController.text,
       'tag': TagModel(id: tagSelected.value!.id, name: tagSelected.value!.name)
           .toJson(),
@@ -972,12 +969,15 @@ class PetitionCreateController extends GetxController {
   }
 
   routeAddressMap() async {
-    var result = await Get.toNamed("/vncitizens_petition/petition_address_map");
-    if (result != null && result is PlaceContent) {
-      placeSelected = result;
-      if (placeSelected != null) {
-        petitionAddressController.text = placeSelected!.address;
-        await convertAddressDecomposition();
+    if (await _determinePosition()) {
+      var result =
+          await Get.toNamed("/vncitizens_petition/petition_address_map");
+      if (result != null && result is PlaceContent) {
+        placeSelected = result;
+        if (placeSelected != null) {
+          petitionAddressController.text = placeSelected!.address;
+          await convertAddressDecomposition();
+        }
       }
     }
   }
@@ -1076,8 +1076,6 @@ class PetitionCreateController extends GetxController {
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      UIHelper.showNotificationSnackBar(
-          message: 'nguoi dung khong mo dinh vi tao do'.tr);
       return null;
     }
 
@@ -1085,8 +1083,6 @@ class PetitionCreateController extends GetxController {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        UIHelper.showNotificationSnackBar(
-            message: 'khong co quyen su dung dinh vi'.tr);
         return null;
       }
     }

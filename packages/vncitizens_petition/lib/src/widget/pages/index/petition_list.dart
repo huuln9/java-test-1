@@ -42,7 +42,12 @@ class _PetitionListState extends State<PetitionList>
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
-              Get.toNamed('/vncitizens_petition/create');
+              if (AuthUtil.isLoggedIn != true) {
+                UIHelper.showRequiredLoginDialog(
+                    routeBack: '/vncitizens_petition/list');
+              } else {
+                Get.toNamed('/vncitizens_petition/create');
+              }
             }));
   }
 }
