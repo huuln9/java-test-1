@@ -340,26 +340,6 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
-        },
-        {
-            "name": "vncitizens_weather",
-            "cwd": "packages\\vncitizens_weather",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "vncitizens_weather (profile mode)",
-            "cwd": "packages\\vncitizens_weather",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "vncitizens_weather (release mode)",
-            "cwd": "packages\\vncitizens_weather",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
         }
     ]
 }

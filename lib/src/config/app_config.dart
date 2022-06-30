@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:vncitizens_common/vncitizens_common.dart';
 import 'package:vncitizens_home/vncitizens_home.dart' show HomeAppConfig;
-import 'package:vncitizens_account/vncitizens_account.dart' show AccountRouteConfig, AuthUtil;
+import 'package:vncitizens_account/vncitizens_account.dart'
+    show AccountRouteConfig, AuthUtil;
 
 class AppConfig {
   // ------------------------------------
@@ -16,13 +16,14 @@ class AppConfig {
   static const fallbackLocale = Locale('en');
 
   /// the base url of ISCS APIs
-  static const String iscsBaseUrl = "https://iscsapidev.digigov.vn";
+  // static const String iscsBaseUrl = "https://salesmanapidev.digigov.vn";
+  static const String iscsBaseUrl = "https://iscsapidemo.digigov.vn";
 
   /// config code
-  static const String configCode = "vncitizens-dev";
+  static const String configCode = "vncitizens-hcm";
 
   /// deployment id (tenant id)
-  static const String deploymentId = "master";
+  static const String deploymentId = "tphcm";
 
   /// package name
   static const String packageName = "flutter_vncitizens";

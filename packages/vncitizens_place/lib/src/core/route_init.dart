@@ -1,6 +1,6 @@
 import 'package:digo_common/digo_common.dart';
 import 'package:vncitizens_place/src/config/app_config.dart';
-import 'package:vncitizens_place/src/widget/pages/index/place.dart';
+import 'package:vncitizens_place/src/widget/place.dart';
 import 'package:get/get.dart';
 import 'dart:developer' as dev;
 

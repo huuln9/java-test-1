@@ -5,10 +5,13 @@ class ViTranslation extends Translations {
   Map<String, Map<String, String>> get keys => {
         'vi': {
           'danh ba khan cap': "Danh bạ khẩn cấp",
-          'danh ba': "Danh bạ",
           'khong tim thay danh ba': "Không tìm thấy danh bạ",
           'tu khoa': 'Từ khóa',
-          "tai them du lieu that bai": "Tải thêm dữ liệu thất bại"
+          'tong dai 113-114-115': 'Tổng đài 113-114-115',
+          'canh sat': 'Cảnh sát',
+          'chua chay': 'Chữa cháy',
+          'cap cuu': 'Cấp cứu',
+          'dang thuc hien': 'Đang thực hiện'
         },
       };
 }

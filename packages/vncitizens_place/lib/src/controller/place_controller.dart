@@ -3,38 +3,50 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:vncitizens_common/vncitizens_common.dart' hide LatLng;
+import 'package:vncitizens_common_hcm/vncitizens_common_hcm.dart';
 import 'package:vncitizens_place/src/config/app_config.dart';
-import 'package:vncitizens_place/src/model/map_maker.dart';
-import 'package:vncitizens_place/src/model/place_content.dart';
-import 'package:vncitizens_place/src/model/place_page.dart';
-import 'package:vncitizens_place/src/model/tag_content.dart';
-import 'package:vncitizens_place/src/model/tag_page.dart';
-import 'package:vncitizens_place/src/model/tag_selector.dart';
+import 'package:vncitizens_place/src/model/hcm_tag_resource.dart';
 import 'package:vncitizens_place/src/util/image_caching_util.dart';
 
+import '../model/hcm_place.dart';
+import '../model/hcm_place_marker.dart';
+
 class PlaceController extends GetxController {
-  late LatLng centerLocation;
+  Rx<LatLng> centerLocation = AppConfig.centerLocation.obs;
   RxBool isDefaultView = true.obs;
+  int configTypeView = AppConfig.getConfigTypeView;
 
   /// Tag
   RxBool isTagLoading = false.obs;
-  RxList<TagSelector> tags = <TagSelector>[].obs;
-  Set<String> _tagIds = {};
+  RxList<Marker> markers = <Marker>[].obs;
+  RxList<String> tagIds = <String>[].obs;
   RxBool isSelectedAllTags = false.obs;
   ScrollController vTagScrollController = ScrollController();
   ScrollController hTagScrollController = ScrollController();
+  TextEditingController searchController = TextEditingController();
+
   RxBool isMoreAvailableTag = false.obs;
   RxBool isLastTagPage = false.obs;
+  RxBool isSearch = false.obs;
   int _pageTag = 0;
 
   /// Place
   RxBool isPlaceLoading = false.obs;
   RxString id = ''.obs;
   RxString keyword = ''.obs;
-  int _pagePlace = 0;
-  RxList<PlaceSelector> places = <PlaceSelector>[].obs;
+  HCMPlaceResource? hcmPlaceSelected;
+  int _pagePlace = 1;
+  RxList<HCMPlaceResource> hcmPlaces = <HCMPlaceResource>[].obs;
+  RxList<HCMTagResource> hcmTags = <HCMTagResource>[
+    HCMTagResource(name: 'Y tế', id: 'c00e92e9-5f0a-4bb9-b536-c35d65c1ec74'),
+    HCMTagResource(
+        name: 'Trường công lập', id: 'ecc45674-4d61-4087-80a7-a18aee6c28d7'),
+    HCMTagResource(
+        name: 'Trường tư thục', id: 'e47b601d-2006-40d8-adc7-b2fcbdf22f7a')
+  ].obs;
   RxMap<String, Uint8List> iconBytesList = <String, Uint8List>{}.obs;
   ScrollController placeScrollController = ScrollController();
   RxBool isMoreAvailablePlace = false.obs;
@@ -60,8 +72,9 @@ class PlaceController extends GetxController {
 
   Future<void> init() async {
     await _initPagination();
-    await _getTags();
-    await getPlaces();
+    // await _getTags();
+    // await getPlaces();
+    await getAllResource();
   }
 
   Future<void> _initPagination() async {
@@ -70,7 +83,7 @@ class PlaceController extends GetxController {
           vTagScrollController.position.maxScrollExtent) {
         if (!isLastTagPage.value) {
           _pageTag++;
-          _getMoreTags();
+          // _getMoreTags();
         } else {
           log("Last page tag: " + _pageTag.toString(),
               name: AppConfig.packageName);
@@ -82,7 +95,7 @@ class PlaceController extends GetxController {
           hTagScrollController.position.maxScrollExtent) {
         if (!isLastTagPage.value) {
           _pageTag++;
-          _getMoreTags();
+          // _getMoreTags();
         } else {
           log("Last page tag: " + _pageTag.toString(),
               name: AppConfig.packageName);
@@ -91,10 +104,15 @@ class PlaceController extends GetxController {
     });
     placeScrollController.addListener(() {
       if (placeScrollController.position.pixels ==
-          placeScrollController.position.maxScrollExtent) {
+              placeScrollController.position.maxScrollExtent &&
+          !isMoreAvailablePlace.value) {
         if (!isLastPlacePage.value) {
-          _pagePlace++;
-          _getMorePlaces();
+          if (isSearch.value) {
+            _pagePlace++;
+            loadMoreSearchPlaces(searchController.text);
+          } else {
+            _getMorePlaces();
+          }
         } else {
           log("Last page place: " + _pagePlace.toString(),
               name: AppConfig.packageName);
@@ -103,175 +121,352 @@ class PlaceController extends GetxController {
     });
   }
 
-  Future<void> toggleView() async {
-    isDefaultView.value = !isDefaultView.value;
+  Future<void> toggleView({bool? isDefault}) async {
+    isDefaultView.value = isDefault ?? !isDefaultView.value;
   }
 
-  Future<void> _getTags() async {
-    try {
-      isTagLoading(true);
-      DirectoryService()
-          .getTagsByCategoryId(AppConfig.tagCategoryId, _pageTag, _size)
-          .then((res) {
-        TagPage page = TagPage.fromJson(res.body);
-        for (var i = 0; i < page.numberOfElements; ++i) {
-          TagContent element = page.content[i];
-          tags.add(TagSelector(data: element, isSelected: false));
-        }
-        isTagLoading(false);
-      }, onError: (err) {
-        isTagLoading(false);
-      });
-    } catch (ex) {
-      isTagLoading(false);
+  Future<void> toggleSearchOrClose() async {
+    isSearch(!isSearch.value);
+    // isSearch.refresh();
+    if (!isSearch.value) {
+      searchController.clear();
+      await searchPlaces('');
+      _pagePlace = 1;
+      await refreshPlaces();
+    } else {
+      _pagePlace = 1;
     }
   }
 
-  Future<void> _getMoreTags() async {
-    try {
-      isMoreAvailableTag(true);
-      DirectoryService()
-          .getTagsByCategoryId(AppConfig.tagCategoryId, _pageTag, _size)
-          .then((res) {
-        TagPage page = TagPage.fromJson(res.body);
-        for (var i = 0; i < page.numberOfElements; ++i) {
-          TagContent element = page.content[i];
-          tags.add(TagSelector(data: element, isSelected: false));
-        }
-        tags.refresh();
-        isLastTagPage(page.last);
-        isMoreAvailableTag(false);
-      }, onError: (err) {
-        isMoreAvailableTag(false);
-      });
-    } catch (ex) {
-      isMoreAvailableTag(false);
-    }
-  }
-
-  Future<void> toggleTag(int index) async {
-    tags[index].isSelected = !tags[index].isSelected;
-    _pagePlace = 0;
-    if (tags[index].isSelected) {
-      _tagIds.add(tags[index].data.id);
+  Future<void> toggleHCMTag(int index) async {
+    // toggleView(isDefault: false);
+    _pagePlace = 1;
+    hcmTags[index].isSelected = !hcmTags[index].isSelected;
+    // isSearch(false);
+    if (hcmTags[index].isSelected) {
+      tagIds.add(hcmTags[index].id);
       bool temp = true;
-      for (TagSelector selector in tags) {
+      for (HCMTagResource selector in hcmTags) {
         if (!selector.isSelected) {
           temp = false;
           break;
         }
       }
+      if (isSearch.value) {
+        searchPlaces(searchController.text);
+      } else {
+        await refreshPlaces();
+      }
+
       isSelectedAllTags(temp);
     } else {
       isSelectedAllTags(false);
-      _tagIds.remove(tags[index].data.id);
+      hcmPlaces
+          .removeWhere((element) => element.resourceId == hcmTags[index].id);
+      getMarker();
+      tagIds.remove(hcmTags[index].id);
+      if (tagIds.isEmpty) {
+        if (isSearch.value) {
+          searchPlaces(searchController.text);
+        } else {
+          await getAllResource();
+        }
+      }
     }
-    await getPlaces(keyword: keyword.value);
-    tags.refresh();
+    hcmTags.refresh();
   }
 
+  //HCM places
   void selectAllTags() {
-    for (var _tag in tags) {
+    for (var _tag in hcmTags) {
       _tag.isSelected = true;
-      _tagIds.add(_tag.data.id);
+      tagIds.add(_tag.id);
     }
     isSelectedAllTags(true);
-    tags.refresh();
+    hcmTags.refresh();
   }
 
   void unselectAllTags() {
-    for (var _tag in tags) {
+    for (var _tag in hcmTags) {
       _tag.isSelected = false;
     }
-    _tagIds = {};
+    tagIds.value = [];
     isSelectedAllTags(false);
-    tags.refresh();
+    hcmTags.refresh();
   }
 
-  Future<void> getPlaces({String? keyword}) async {
-    try {
-      isPlaceLoading(true);
-      String _tagIdsStr = _tagIds
-          .toString()
-          .replaceAll('{', '')
-          .replaceAll('}', '')
-          .replaceAll(' ', '');
-      LocationService()
-          .getPlaces(_pagePlace, _size,
-              keyword: keyword,
-              tagCategoryId: AppConfig.tagCategoryId,
-              tagId: _tagIdsStr != '' ? _tagIdsStr : null)
-          .then((res) {
-        places.value = [];
-        PlacePage page = PlacePage.fromJson(res.body);
-        for (var i = 0; i < page.numberOfElements; ++i) {
-          PlaceContent element = page.content[i];
-          if (!element.location.isEmpty()) {
-            places.add(PlaceSelector(data: element, isSelected: false));
-            if (element.thumbnail.isNotEmpty) {
-              () async {
-                await _getIcons(element.id, element.thumbnail);
-              }.call();
-            } else {
-              ImageCachingUtil.delete(element.thumbnail);
-            }
+  getMarker() {
+    if (configTypeView == 0) {
+      markers.value = [];
+      try {
+        for (final place in hcmPlaces) {
+          if (place.latitude != 0.0 && place.longtitude != 0.0) {
+            var marker = HCMPlaceMarker(place: place);
+            markers.add(marker);
           }
         }
-        places.refresh();
-        isPlaceLoading(false);
-      }, onError: (err) {
-        isPlaceLoading(false);
-      });
-    } catch (ex) {
-      isPlaceLoading(false);
+        markers.refresh();
+      } catch (_) {}
     }
   }
 
-  Future<void> _getMorePlaces() async {
+  Future<void> loadMoreSearchPlaces(String key) async {
     try {
-      isMoreAvailablePlace(true);
-      String _tagIdsStr = _tagIds
-          .toString()
-          .replaceAll('{', '')
-          .replaceAll('}', '')
-          .replaceAll(' ', '');
-      LocationService()
-          .getPlaces(_pagePlace, _size,
-              keyword: keyword.value,
-              tagCategoryId: AppConfig.tagCategoryId,
-              tagId: _tagIdsStr != '' ? _tagIdsStr : null)
-          .then((res) {
-        PlacePage page = PlacePage.fromJson(res.body);
-        for (var i = 0; i < page.numberOfElements; ++i) {
-          PlaceContent element = page.content[i];
-          if (!element.location.isEmpty()) {
-            places.add(PlaceSelector(data: element, isSelected: false));
-            if (element.thumbnail.isNotEmpty) {
-              () async {
-                await _getIcons(element.id, element.thumbnail);
-              }.call();
-            } else {
-              ImageCachingUtil.delete(element.thumbnail);
-            }
+      if (key.isNotEmpty) {
+        isMoreAvailablePlace(true);
+        List<String> ids = [];
+        if (tagIds.isNotEmpty) {
+          ids = tagIds;
+        } else {
+          for (final tag in hcmTags) {
+            ids.add(tag.id);
           }
         }
-        isLastPlacePage(page.last);
-        places.refresh();
+        for (final id in ids) {
+          int offset = 0;
+
+          if (hcmPlaces.isNotEmpty) {
+            offset = hcmPlaces.where((va) => va.resourceId == id).length;
+          }
+          var result = await HCMResourceService().getPlacesResources(
+              id: id, limit: _size, offset: offset, keySearch: key);
+          HCMPlaceResourceResponse response =
+              HCMPlaceResourceResponse.fromJson(result.body['result']);
+          for (var i = 0; i < response.records!.length; ++i) {
+            HCMPlaceResource element = response.records![i];
+            element.resourceId = id;
+            if (configTypeView == 0) {
+              try {
+                var response = await HCMLocationService().searchLocal(
+                    _getSearchLocationKey(element) + ', Hồ Chí Minh');
+                if (response.body['List'].length > 0) {
+                  var local = response.body['List'][0];
+                  element.latitude = local['Latitude'];
+                  element.longtitude = local['Longitude'];
+                  if (element.address == null ||
+                      element.address!.isEmpty ||
+                      element.address == 'none') {
+                    element.address = getAddressFromVietBanDo(local);
+                  }
+                }
+              } catch (_) {}
+            }
+
+            hcmPlaces.add(element);
+          }
+        }
+
+        getMarker();
+        hcmPlaces.refresh();
+        markers.refresh();
+        hcmPlaces.refresh();
+
         isMoreAvailablePlace(false);
-      }, onError: (err) {
+      } else {
         isMoreAvailablePlace(false);
-      });
+        _pagePlace = 1;
+        // markers.value = [];
+        // hcmPlaces.value = [];
+        // await refreshPlaces();
+
+      }
     } catch (ex) {
       isMoreAvailablePlace(false);
     }
   }
 
-  Future<void> _getIcons(String placeId, String iconId) async {
+  _getSearchLocationKey(HCMPlaceResource element) {
+    if (element.address != null &&
+        element.address!.isNotEmpty &&
+        element.address != 'none') {
+      return element.address;
+    }
+    return element.name ?? '';
+  }
+
+  getAddressFromVietBanDo(dynamic data) {
+    var address = '';
+    if (data['Number'] != null && data['Number'].toString().isNotEmpty) {
+      address += data['Number'];
+    }
+    if (data['Street'] != null && data['Street'].toString().isNotEmpty) {
+      address += ' ' + data['Street'];
+    }
+    if (data['Ward'] != null && data['Ward'].toString().isNotEmpty) {
+      address += ', ' + data['Ward'];
+    }
+
+    if (data['District'] != null && data['District'].toString().isNotEmpty) {
+      address += ', ' + data['District'];
+    }
+    if (data['Province'] != null && data['Province'].toString().isNotEmpty) {
+      address += ' ' + data['Province'];
+    }
+    return address;
+  }
+
+  Future<void> searchPlaces(String key) async {
+    if (key.isNotEmpty) {
+      try {
+        _pagePlace = 1;
+        markers.value = [];
+        hcmPlaces.value = [];
+        isPlaceLoading(true);
+        List<String> ids = [];
+        if (tagIds.isNotEmpty) {
+          ids = tagIds;
+        } else {
+          for (final tag in hcmTags) {
+            ids.add(tag.id);
+          }
+        }
+        for (var tag in ids) {
+          var result = await HCMResourceService().getPlacesResources(
+              id: tag, limit: _size, offset: 0, keySearch: key);
+          HCMPlaceResourceResponse response =
+              HCMPlaceResourceResponse.fromJson(result.body['result']);
+          for (var i = 0; i < response.records!.length; ++i) {
+            HCMPlaceResource element = response.records![i];
+            element.resourceId = tag;
+            if (configTypeView == 0) {
+              try {
+                var response = await HCMLocationService().searchLocal(
+                    _getSearchLocationKey(element) + ', Hồ Chí Minh');
+                if (response.body['List'].length > 0) {
+                  var local = response.body['List'][0];
+                  element.latitude = local['Latitude'];
+                  element.longtitude = local['Longitude'];
+                  if (element.address == null ||
+                      element.address!.isEmpty ||
+                      element.address == 'none') {
+                    element.address = getAddressFromVietBanDo(local);
+                  }
+                }
+              } catch (_) {}
+            }
+
+            hcmPlaces.add(element);
+          }
+        }
+
+        try {
+          getMarker();
+          hcmPlaces.refresh();
+          isPlaceLoading(false);
+        } catch (_) {
+          isPlaceLoading(false);
+        }
+      } catch (ex) {
+        isPlaceLoading(false);
+      }
+    } else {
+      // _pagePlace = 1;
+      // markers.value = [];
+      // hcmPlaces.value = [];
+      // await refreshPlaces();
+    }
+  }
+
+  Future<void> getPlaces({String? id, bool? isLoading}) async {
+    try {
+      var resourceId = id;
+      if (resourceId == null && hcmTags.isNotEmpty) {
+        resourceId = hcmTags[0].id;
+      }
+      final res = await HCMResourceService()
+          .getPlacesResources(id: resourceId ?? '', limit: _size, offset: 0);
+      HCMPlaceResourceResponse response =
+          HCMPlaceResourceResponse.fromJson(res.body['result']);
+      for (var i = 0; i < response.records!.length; ++i) {
+        HCMPlaceResource element = response.records![i];
+        element.resourceId = resourceId ?? '';
+        if (configTypeView == 0) {
+          try {
+            var response = await HCMLocationService()
+                .searchLocal(_getSearchLocationKey(element) + ', Hồ Chí Minh');
+            if (response.body['List'].length > 0) {
+              var local = response.body['List'][0];
+              element.latitude = local['Latitude'];
+              element.longtitude = local['Longitude'];
+              if (element.address == null ||
+                  element.address!.isEmpty ||
+                  element.address == 'none') {
+                element.address = getAddressFromVietBanDo(local);
+              }
+            }
+          } catch (_) {}
+        }
+
+        hcmPlaces.add(element);
+      }
+      hcmPlaces.refresh();
+      getMarker();
+    } catch (ex) {}
+  }
+
+  Future<void> _getMorePlaces() async {
+    try {
+      isMoreAvailablePlace(true);
+      List<String> ids = [];
+      if (tagIds.isNotEmpty) {
+        ids = tagIds;
+      } else {
+        for (final tag in hcmTags) {
+          ids.add(tag.id);
+        }
+      }
+      for (final id in ids) {
+        int offset = 0;
+
+        if (hcmPlaces.isNotEmpty) {
+          offset = hcmPlaces.where((va) => va.resourceId == id).length;
+        }
+        var res = await HCMResourceService()
+            .getPlacesResources(id: id, limit: _size, offset: offset);
+
+        HCMPlaceResourceResponse response =
+            HCMPlaceResourceResponse.fromJson(res.body['result']);
+
+        for (var i = 0; i < response.records!.length; ++i) {
+          HCMPlaceResource element = response.records![i];
+          element.resourceId = id;
+          if (configTypeView == 0) {
+            try {
+              var response = await HCMLocationService().searchLocal(
+                  _getSearchLocationKey(element) + ', Hồ Chí Minh');
+              if (response.body['List'].length > 0) {
+                var local = response.body['List'][0];
+                element.latitude = local['Latitude'];
+                element.longtitude = local['Longitude'];
+                if (element.address == null ||
+                    element.address!.isEmpty ||
+                    element.address == 'none') {
+                  element.address = getAddressFromVietBanDo(local);
+                }
+                var marker = HCMPlaceMarker(place: element);
+                markers.add(marker);
+              }
+            } catch (_) {}
+          }
+
+          hcmPlaces.add(element);
+        }
+        markers.refresh();
+        hcmPlaces.refresh();
+
+        isMoreAvailablePlace(false);
+      }
+    } catch (ex) {
+      isMoreAvailablePlace(false);
+    }
+  }
+
+  Future<void> _getIcons(String fcmId, String iconId) async {
     Uint8List? icon = await ImageCachingUtil.get(iconId);
     if (icon != null) {
       log("Load icon from local",
           name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
-      iconBytesList[placeId] = icon;
+      iconBytesList[fcmId] = icon;
     } else {
       log("Load icon from minio",
           name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
@@ -284,38 +479,59 @@ class PlaceController extends GetxController {
         File file =
             await MinioService().getFile(minioPath: responseFile.body["path"]);
         Uint8List iconBytes = await file.readAsBytes();
-        iconBytesList[placeId] = iconBytes;
-        ImageCachingUtil.set(iconId, iconBytes);
+        iconBytesList[fcmId] = iconBytes;
       }
     }
   }
 
   Future<void> refreshPlaces() async {
-    places.value = [];
-    isLastPlacePage(false);
-    _pagePlace = 0;
-    getPlaces();
-  }
-
-  void togglePlace(int index) {
-    places[index].isSelected = !places[index].isSelected;
-    if (places[index].isSelected) {
-      for (var i = 0; i < places.length; i++) {
-        if (index != i) {
-          places[i].isSelected = false;
+    try {
+      if (!isSearch.value) {
+        hcmPlaces.value = [];
+        markers.value = [];
+        isLastPlacePage(false);
+        _pagePlace = 1;
+        if (tagIds.isNotEmpty) {
+          isPlaceLoading(true);
+          for (final id in tagIds) {
+            await getPlaces(id: id, isLoading: false);
+          }
+          isPlaceLoading(false);
+        } else {
+          await getAllResource();
         }
       }
+    } catch (ex) {
+      isPlaceLoading(false);
     }
-    places.refresh();
   }
 
-  Future<void> makeCall(String phoneNumber) async {
-    final url = 'tel:$phoneNumber';
-    await launch(url).catchError((onError) {
-      log('An error occurred ! Could not make a call',
-          name: AppConfig.packageName);
-      log(onError, name: AppConfig.packageName);
-    });
-    log('Make a call successfully', name: AppConfig.packageName);
+  getAllResource() async {
+    try {
+      isPlaceLoading(true);
+      // HCMResourceService()
+      //     .getCategoriesResources(AppConfig.schoolCategoryResourceId)
+      //     .then((res) {
+      //   print("getCategoriesResource");
+      //   var maintainer = res.body['result'];
+      //   if (maintainer.length > 0) {
+      //     List<dynamic> resources = maintainer[0]['resources'];
+      //     for (final item in resources
+      //         .where((element) => element['description'].contains('DiaChi'))) {
+      //       hcmTags.add(HCMTagResource.fromJson(item));
+      //     }
+      //   }
+      //   hcmTags.refresh();
+      //   isTagLoading(false);
+      // }, onError: (err) {
+      //   isTagLoading(false);
+      // });
+      for (final tag in hcmTags) {
+        await getPlaces(id: tag.id, isLoading: false);
+      }
+      isPlaceLoading(false);
+    } catch (ex) {
+      isPlaceLoading(false);
+    }
   }
 }

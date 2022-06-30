@@ -1,15 +1,12 @@
 package vn.vnpt.digo.vncitzens.flutter.app.dev
 
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
-import com.bumptech.glide.Glide
 import com.vnpt.vnptmedia.soft.vnptpaysdkfull.uiv3.home.SDKActivityHome
 import com.vnpt.vnptmedia.soft.vnptpaysdkfull.utils.VnptPaySdkManager
 import com.vnptit.si.bio_sdk.model.*
@@ -178,7 +175,9 @@ class MainActivity: FlutterActivity() {
                 when {
                     call.method!!.contentEquals("openPay") -> {
                         Log.d(channelVnptPay, "openPay")
-                        VnptPaySdkManager.getInstance().openPayByButton(context)
+//                        VnptPaySdkManager.getInstance().openPayByButton(context)
+                        val intent = Intent(context, VnptPayFragmentActivity::class.java)
+                        startActivity(intent)
                     }
                     call.method!!.contentEquals("thanhToanTienDien") -> {
                         Log.d(channelVnptPay, "thanhToanTienDien")

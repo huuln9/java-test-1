@@ -32,7 +32,7 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="vnCitizens"
+        android:label="TPHCM Citizen"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon, android:label">
@@ -76,6 +76,8 @@
 
         <activity android:name="com.vnptit2.vnpt_vcall.NotificationActivity" />
         <activity android:name="com.vnptit2.vnpt_vcall.MissedCall" />
+
+        <activity android:name=".VnptPayFragmentActivity" />
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 

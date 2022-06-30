@@ -3,17 +3,22 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:latlong2/latlong.dart';
 import 'package:vncitizens_common/vncitizens_common.dart' hide LatLng;
+import 'package:vncitizens_common_hcm/vncitizens_common_hcm.dart';
 import 'package:vncitizens_place/src/config/app_config.dart';
 import 'package:vncitizens_place/src/controller/place_controller.dart';
-import 'package:vncitizens_place/src/model/place_detail.dart';
 import 'package:vncitizens_place/src/util/image_caching_util.dart';
 
+import '../model/hcm_place.dart';
+import '../model/hcm_place_marker.dart';
+
 class PlaceDetailController extends GetxController {
-  late LatLng centerLocation;
+  Rx<LatLng> centerLocation = AppConfig.centerLocation.obs;
   RxBool isLoading = false.obs;
-  Rx<PlaceDetail> place = PlaceDetail().obs;
+  Rx<HCMPlaceResource> place = HCMPlaceResource().obs;
+  HCMPlaceMarker? marker;
 
   Rxn<Uint8List> thumbnailBytes = Rxn<Uint8List>();
+  bool placeDetailViewMap = AppConfig.getPlaceDetailViewMap;
 
   @override
   void onInit() async {
@@ -24,54 +29,62 @@ class PlaceDetailController extends GetxController {
 
   Future<void> _init() async {
     PlaceController placeController = Get.find();
-    _getPlaceById(placeController.id.value);
+    centerLocation.value = LatLng(placeController.hcmPlaceSelected!.latitude,
+        placeController.hcmPlaceSelected!.longtitude);
+    place.value = placeController.hcmPlaceSelected!;
+    await _getHCMPlace(placeController);
   }
 
-  void _getPlaceById(String id) {
+  Future<void> _getHCMPlace(PlaceController controller) async {
     try {
-      isLoading(true);
-      LocationService().getPlaceById(id: id).then((res) {
-        place.value = PlaceDetail.fromJson(res.body);
-        centerLocation = LatLng(place.value.location!.coordinates[1],
-            place.value.location!.coordinates[0]);
-        String thumbnailId = place.value.thumbnail;
-        if (thumbnailId.isNotEmpty) {
-          () async {
-            await _getThumbnail(thumbnailId);
-          }.call();
+      var hcmPlaceSelected = controller.hcmPlaceSelected!;
+      if (hcmPlaceSelected.latitude == 0.0 &&
+          hcmPlaceSelected.longtitude == 0.0) {
+        isLoading(true);
+
+        var searchkey = '';
+        var usingNewData = false;
+        if (controller.hcmPlaceSelected!.address != null &&
+            controller.hcmPlaceSelected!.address!.isNotEmpty &&
+            controller.hcmPlaceSelected!.address != 'None') {
+          searchkey = controller.hcmPlaceSelected!.address!;
         } else {
-          ImageCachingUtil.delete(thumbnailId);
+          usingNewData = true;
+          searchkey = controller.hcmPlaceSelected!.name ?? '';
         }
-        isLoading(false);
-      }, onError: (err) {
-        isLoading(false);
-      });
+
+        HCMLocationService().searchLocal(searchkey + ', Hồ Chí Minh').then(
+            (value) {
+          if (value.body['List'].length > 0) {
+            var local = value.body['List'][0];
+            if (!usingNewData) {
+              controller.hcmPlaceSelected!.latitude = local['Latitude'];
+              controller.hcmPlaceSelected!.longtitude = local['Longitude'];
+              marker = HCMPlaceMarker(place: controller.hcmPlaceSelected);
+              centerLocation.value = LatLng(
+                  controller.hcmPlaceSelected!.latitude,
+                  controller.hcmPlaceSelected!.longtitude);
+              place.value = controller.hcmPlaceSelected!;
+            } else {
+              var pla = HCMPlaceResource.fromJson(value.body['List'][0]);
+              marker = HCMPlaceMarker(place: pla);
+              centerLocation.value = LatLng(pla.latitude, pla.longtitude);
+              place.value = pla;
+            }
+          }
+
+          isLoading(false);
+        }, onError: (ex) {
+          isLoading(false);
+        });
+      } else {
+        marker = HCMPlaceMarker(place: controller.hcmPlaceSelected);
+        centerLocation.value = LatLng(controller.hcmPlaceSelected!.latitude,
+            controller.hcmPlaceSelected!.longtitude);
+        place.value = controller.hcmPlaceSelected!;
+      }
     } catch (ex) {
       isLoading(false);
-    }
-  }
-
-  Future<void> _getThumbnail(String thumbnailId) async {
-    Uint8List? thumbnail = await ImageCachingUtil.get(thumbnailId);
-    if (thumbnail != null) {
-      log("Load avatar from local",
-          name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
-      thumbnailBytes.value = thumbnail;
-    } else {
-      log("Load avatar from minio",
-          name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
-      Response responseFile =
-          await StorageService().getFileDetail(id: thumbnailId);
-      log(responseFile.statusCode.toString(),
-          name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
-      log(responseFile.body.toString(),
-          name: CommonUtil.getCurrentClassAndFuncName(StackTrace.current));
-      if (responseFile.statusCode == 200 && responseFile.body["path"] != null) {
-        File file =
-            await MinioService().getFile(minioPath: responseFile.body["path"]);
-        thumbnailBytes.value = await file.readAsBytes();
-        ImageCachingUtil.set(thumbnailId, thumbnailBytes.value as Uint8List);
-      }
     }
   }
 

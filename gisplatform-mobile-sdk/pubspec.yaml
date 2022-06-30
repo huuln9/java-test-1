@@ -1,0 +1,44 @@
+name: flutter_vnpt_map
+description: Flutter Plugin for VNPT Map
+version: 2.0.0
+author: ttdat@vnpt.vn
+homepage:
+publish_to: "none"
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  http: ^0.13.3
+  rxdart: ^0.27.3
+  tuple: ^2.0.0
+  positioned_tap_detector_2: ^1.0.4
+  transparent_image: ^2.0.0
+  flutter_image: ^4.1.0
+  sqflite: ^2.0.1
+  path_provider: ^2.0.4
+  vector_math: ^2.1.0
+  proj4dart: ^2.0.0
+  extra_pedantic: ^1.5.0
+  geopoint: ^1.0.0
+  iso: ^1.0.0
+  context_menus: ^0.1.0+5
+  animated_stack_widget: ^0.0.4
+  flutter_keyboard_visibility: ^5.0.0
+  latlong2: ^0.8.0
+  pedantic: ^1.11.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/
+  plugin:
+    androidPackage: vn.vnpt.flutter_vnpt_map
+    pluginClass: FlutterVnptMapPlugin

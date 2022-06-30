@@ -4,18 +4,25 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=2.16.1 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
   vncitizens_common:
-    path: ../vncitizens_common
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_common
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_common
+  vncitizens_common_hcm:  
+    path: ../vncitizens_common_hcm  
+    
+  vncitizens_account:
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_account 
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +38,9 @@ flutter:
   # To add assets to your package, add an assets section, like this:
    assets:
      - packages/vncitizens_emergency_contact/assets/images/contact_default.png
+     - packages/vncitizens_emergency_contact/assets/images/ambulance.png
+     - packages/vncitizens_emergency_contact/assets/images/fire-extinguisher.png
+     - packages/vncitizens_emergency_contact/assets/images/police-cap.png
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

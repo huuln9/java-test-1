@@ -31,18 +31,12 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
-    sdk: flutter
+    sdk: flutter  
   intl: ^0.17.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  vncitizens_nature:
-    path: packages/vncitizens_nature
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_nature
   vnpt_vcall:
     git:
       url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens_plugin
@@ -50,100 +44,61 @@ dependencies:
       path: plugin_vcall_default
   vncitizens_emergency_contact:
     path: packages/vncitizens_emergency_contact
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_emergency_contact
+  vncitizens_common_hcm:
+    path: packages/vncitizens_common_hcm
   vncitizens_common:
-    path: packages/vncitizens_common
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_common
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_common
   vncitizens_home:
-    path: packages/vncitizens_home
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_home
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_home
   vncitizens_notification:
-    path: packages/vncitizens_notification
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_notification
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_notification
   vncitizens_account:
-    path: packages/vncitizens_account
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_account
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_account
   vncitizens_qrcode:
-    path: packages/vncitizens_qrcode
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_qrcode
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_qrcode
+    # path: packages/vncitizens_qrcode
   vncitizens_setting:
-    path: packages/vncitizens_setting
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_setting
-  vncitizens_garbage_schedule:
-    path: packages/vncitizens_garbage_schedule
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_garbage_schedule
-  vncitizens_portal:
-    path: packages/vncitizens_portal
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_portal
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_setting
+  # vncitizens_garbage_schedule:
+  #   path: packages/vncitizens_garbage_schedule
+  # vncitizens_portal:
+  #   path: packages/vncitizens_portal
   vncitizens_place:
     path: packages/vncitizens_place
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_place
-  vncitizens_camera:
-    path: packages/vncitizens_camera
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_camera
-  vncitizens_administrative_document:
-    path: packages/vncitizens_administrative_document
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_administrative_document
+  # vncitizens_camera:
+  #   path: packages/vncitizens_camera
+  # vncitizens_administrative_document:
+  #   path: packages/vncitizens_administrative_document
   vncitizens_payment:
-    path: packages/vncitizens_payment
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_payment
-  vncitizens_queue:
-    path: packages/vncitizens_queue
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_queue
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_payment
   vncitizens_weather:
-    path: packages/vncitizens_weather
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_weather
-  vncitizens_dossier:
-    path: packages/vncitizens_dossier
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_dossier
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_weather    
+  # vncitizens_queue:
+  #   path: packages/vncitizens_queue
   flutter_native_splash: ^1.3.2
 
 dev_dependencies:

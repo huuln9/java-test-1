@@ -11,11 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
   vncitizens_common:
-    path: ../vncitizens_common
-    # git:
-    #   url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
-    #   ref: v1.0.0
-    #   path: packages/vncitizens_common
+    git:
+      url: https://scm.devops.vnpt.vn/egov.ptpm.g038/flutter_vncitizens
+      ref: v1.0.0
+      path: packages/vncitizens_common 
+  vncitizens_common_hcm:
+    path: ../vncitizens_common_hcm    
+  flutter_map: ^0.14.0
+  flutter_map_marker_popup: ^2.1.2
 
 dev_dependencies:
   flutter_test:
@@ -39,10 +42,19 @@ flutter:
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   assets:
+    - packages/vncitizens_place/assets/marker_v2.png
     - packages/vncitizens_place/assets/header.png
     - packages/vncitizens_place/assets/marker.png
     - packages/vncitizens_place/assets/default-marker.png
     - packages/vncitizens_place/assets/selected-marker.png
+    - packages/vncitizens_place/assets/cast_for_education.png
+    - packages/vncitizens_place/assets/category.png
+    - packages/vncitizens_place/assets/cchn.png
+    - packages/vncitizens_place/assets/date_range.png
+    - packages/vncitizens_place/assets/language.png
+    - packages/vncitizens_place/assets/policy.png
+    - packages/vncitizens_place/assets/schedule.png
+    - packages/vncitizens_place/assets/point.png
 
   # To add custom fonts to your package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

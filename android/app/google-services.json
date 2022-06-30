@@ -7,9 +7,81 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1087247083218:android:3e7132c1738f63bb89af0b",
+        "android_client_info": {
+          "package_name": "vn.vnpt.digo.vncitizens.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087247083218-em5ksmkf6fvgp7unvqs1kj99l7j53fj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKbM5YACPt_tq5buYL0T8wLYL1dG5Q06U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087247083218-em5ksmkf6fvgp7unvqs1kj99l7j53fj1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1087247083218-g5kd80f5ql0g1khoflrsidkil6k0c9a8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "vn.vnpt.digo.vncitzens.flutter.app.dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1087247083218:android:837da16239f08cb089af0b",
         "android_client_info": {
           "package_name": "vn.vnpt.digo.vncitzens.app.v2.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087247083218-em5ksmkf6fvgp7unvqs1kj99l7j53fj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKbM5YACPt_tq5buYL0T8wLYL1dG5Q06U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087247083218-em5ksmkf6fvgp7unvqs1kj99l7j53fj1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1087247083218-g5kd80f5ql0g1khoflrsidkil6k0c9a8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "vn.vnpt.digo.vncitzens.flutter.app.dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087247083218:android:5a0ea3fb2923da9c89af0b",
+        "android_client_info": {
+          "package_name": "vn.vnpt.digo.vncitzens.hcm"
         }
       },
       "oauth_client": [
