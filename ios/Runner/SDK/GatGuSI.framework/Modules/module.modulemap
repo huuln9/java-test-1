@@ -1,6 +1,0 @@
-framework module GatGuSI {
-  umbrella header "GatGuSI.h"
-
-  export *
-  module * { export * }
-}

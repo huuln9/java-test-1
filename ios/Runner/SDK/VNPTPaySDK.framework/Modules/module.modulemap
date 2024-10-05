@@ -1,6 +1,0 @@
-framework module VNPTPaySDK {
-  umbrella header "VNPTPaySDK.h"
-
-  export *
-  module * { export * }
-}
