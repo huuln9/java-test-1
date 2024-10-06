@@ -1,8 +1,15 @@
+package test1;
+
 import java.util.*;
 
 public class LopHoc {
     private Integer soLuongSV;
     private Student[] students;
+    
+    public LopHoc() {
+        this.nhap();
+        this.xuatTheoDiem();
+    }
 
     void nhap() {
         Scanner scanner = new Scanner(System.in);

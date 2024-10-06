@@ -1,8 +1,11 @@
+import test1.LopHoc;
+import test2.RegexInfo;
+
 public class Main {
     public static void main(String[] args) {
-        LopHoc lopHoc = new LopHoc();
-        lopHoc.nhap();
-        lopHoc.xuatTheoDiem();
+//        new LopHoc();
+        
+        new RegexInfo();
     }
     
     
